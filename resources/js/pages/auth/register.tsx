@@ -16,7 +16,6 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import {ROLE} from "@/types";
 
 type RegisterForm = {
     name: string;
@@ -25,6 +24,11 @@ type RegisterForm = {
     password_confirmation: string;
     role:ROLE
 };
+
+enum ROLE{
+    CLIENT = "client",
+    FREELANCER = "freelancer"
+}
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
