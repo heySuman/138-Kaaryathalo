@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Freelancer;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FreelancerSkill extends Model

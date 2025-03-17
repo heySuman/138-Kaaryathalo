@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Freelancer;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Experience extends Model
+class Project extends Model
 {
     protected $fillable = [
         'freelancer_id',
-        'company_name',
-        'job_title',
+        'title',
+        'description',
+        'status',
+        'project_url',
         'start_date',
         'end_date',
-        'description',
     ];
 
     public function freelancer(): BelongsTo

@@ -22,15 +22,14 @@ export interface NavItem {
     isActive?: boolean;
 }
 
-export interface SharedData {
+export type SharedData<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
     ziggy: Config & { location: string };
-    [key: string]: unknown;
-}
+};
 
-export interface User {
+export type User = {
     id: number;
     name: string;
     email: string;
@@ -39,10 +38,11 @@ export interface User {
     created_at: string;
     updated_at: string;
     role: ROLE;
-    [key: string]: unknown; // This allows for additional properties...
-}
 
-export enum ROLE{
-    CLIENT = "client",
-    FREELANCER = "freelancer"
+    [key: string]: unknown;
+};
+
+export enum ROLE {
+    CLIENT = 'client',
+    FREELANCER = 'freelancer',
 }
