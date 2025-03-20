@@ -1,21 +1,24 @@
 <?php
 
-use App\Http\Controllers\Settings\PasswordController;
-use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Client\ClientController;
+use \App\Http\Controllers\Dashboard\ClientDashboardController;
+use App\Http\Controllers\JobPosting\JobPostingController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::middleware('auth')->group(function () {
-    Route::redirect('settings', 'settings/profile');
+Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->group(function () {
+    Route::get('dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
 
-    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('profile', [ClientController::class, 'index'])->name('client.profile');
+    Route::post('profile', [ClientController::class, 'store'])->name('client.profile.create');
+    Route::patch('profile', [ClientController::class, 'update'])->name('client.profile.update');
+    Route::delete('profile', [ClientController::class, 'delete'])->name('client.profile.delete');
 
-    Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
-    Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::get('settings/appearance', function () {
-        return Inertia::render('settings/appearance');
-    })->name('appearance');
+    // Job Posting Routing
+    Route::get('my-jobs', [JobPostingController::class, 'index'])->name('client.job-posting.index');
+    Route::get('my-jobs/create', [JobPostingController::class, 'create'])->name('client.job-posting.create');
+    Route::post('my-jobs', [JobPostingController::class, 'store'])->name('client.job-posting.store');
+    Route::get('my-jobs/{jobPosting}', [JobPostingController::class, 'show'])->name('client.job-posting.show');
+    Route::get('my-jobs/{jobPosting}/edit', [JobPostingController::class, 'edit'])->name('client.job-posting.edit');
+    Route::patch('my-jobs/{jobPosting}', [JobPostingController::class, 'update'])->name('client.job-posting.update');
+    Route::delete('my-jobs/{jobPosting}', [JobPostingController::class, 'destroy'])->name('client.job-posting.destroy');
 });

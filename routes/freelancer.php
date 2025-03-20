@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\FreelancerDashboardController;
 use App\Http\Controllers\Freelancer\FreelancerController;
 use App\Http\Controllers\Freelancer\CertificateController;
 use App\Http\Controllers\Freelancer\ExperienceController;
@@ -7,6 +8,8 @@ use App\Http\Controllers\Freelancer\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
+    Route::get('dashboard', [FreelancerDashboardController::class, 'dashboard'])->name('freelancer.dashboard');
+
     Route::get('profile', [FreelancerController::class, 'index'])->name('freelancer.profile');
     Route::post('profile', [FreelancerController::class, 'store'])->name('freelancer.profile.create');
     Route::patch('profile', [FreelancerController::class, 'update'])->name('freelancer.profile.update');

@@ -1,26 +1,13 @@
-import type {BreadcrumbItem, NavItem} from '@/types';
-import {LayoutGrid, User} from "lucide-react";
-
-export const clientBreadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-];
-
-export const freelancerBreadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-];
+import { NavItem } from '@/types';
+import { BriefcaseBusiness, LayoutGrid, MessageSquare, User } from 'lucide-react';
 
 export const freelancerNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/freelancer/dashboard',
         icon: LayoutGrid,
-    },    {
+    },
+    {
         title: 'Profile',
         href: '/freelancer/profile',
         icon: User,
@@ -29,7 +16,22 @@ export const freelancerNavItems: NavItem[] = [
 export const clientNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/client/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'My jobs',
+        href: '/client/my-jobs',
+        icon: BriefcaseBusiness,
+    },
+    {
+        title: 'Inbox',
+        href: '/inbox',
+        icon: MessageSquare,
+    },
+    {
+        title: 'Profile',
+        href: '/client/profile',
+        icon: User,
     },
 ];

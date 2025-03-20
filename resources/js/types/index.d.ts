@@ -38,8 +38,6 @@ export type User = {
     created_at: string;
     updated_at: string;
     role: ROLE;
-
-    [key: string]: unknown;
 };
 
 export enum ROLE {

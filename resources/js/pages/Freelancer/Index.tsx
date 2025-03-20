@@ -5,18 +5,16 @@ import { ExperienceCard } from '@/pages/Freelancer/partials/experience-card';
 import { ProfileAbout } from '@/pages/Freelancer/partials/profile-about';
 import { ProfileCard } from '@/pages/Freelancer/partials/profile-card';
 import { ProjectCard } from '@/pages/Freelancer/partials/project-card';
-import { freelancerBreadcrumbs } from '@/routes';
 import { SharedData } from '@/types';
 import { IFreelancer } from '@/types/freelancer';
 import { Head, usePage } from '@inertiajs/react';
 
 export default function Index() {
     const { freelancer } = usePage<SharedData<{ freelancer: IFreelancer }>>().props;
-    console.log(freelancer);
     return (
-        <AppLayout breadcrumbs={freelancerBreadcrumbs}>
-            <Head title="Index" />
-            {!freelancer && <ProfileRequiredCard />}
+        <AppLayout>
+            <Head title="Profile" />
+            {!freelancer && <ProfileRequiredCard variant={"freelancer"}/>}
             {freelancer && (
                 <>
                     <ProfileCard freelancer={freelancer} />

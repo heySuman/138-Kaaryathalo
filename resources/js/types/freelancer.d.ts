@@ -47,12 +47,13 @@ type ICertificate = {
 type ICategory = {
     id: number;
     category: string;
+    skills?: ISkills[]
 };
 
 type ISkills = {
     id: number;
     category_id: number;
-    skill: string;
+    name: string;
 };
 
 type IFreelancerSkills = {

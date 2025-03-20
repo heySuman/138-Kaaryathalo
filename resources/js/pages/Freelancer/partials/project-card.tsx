@@ -22,7 +22,7 @@ export function ProjectCard({ freelancer }: { freelancer: IFreelancer }) {
                     {freelancer.projects && freelancer.projects.length > 0
                         ? freelancer.projects.map((p, i) => (
                               <div className="space-y-1" key={i}>
-                                  <div className={'flex'}>
+                                  <div className={'flex items-center gap-2'}>
                                       <h3 className="text-xl font-semibold">{p.title}</h3>
                                       <div>
                                           <AlertProjectForm project={p} />
