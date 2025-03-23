@@ -21,7 +21,7 @@ class ClientDashboardController extends Controller
         if (!$client) {
             // Handle the case where the client does not exist
             // For example, you can return an error response or redirect
-            return Inertia::render('Errors/NotFound', [
+            return Inertia::render('Dashboard/client/ClientDashboard', [
                 'message' => 'Client not found.'
             ]);
         }
@@ -35,11 +35,12 @@ class ClientDashboardController extends Controller
 
         // Latest job postings by the user
         $latest_job_postings = JobPosting::where("client_id", $client->id)
+            ->with(['category'])
             ->latest()
             ->limit(5)
             ->get();
 
-        return Inertia::render('Dashboard/ClientDashboard', [
+        return Inertia::render('Dashboard/client/ClientDashboard', [
             "jobStatusCount" => $jobCountStatus,
             "latestJobPostings" => $latest_job_postings
         ]);

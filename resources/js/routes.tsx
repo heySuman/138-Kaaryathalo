@@ -1,11 +1,21 @@
 import { NavItem } from '@/types';
-import { BriefcaseBusiness, LayoutGrid, MessageSquare, User } from 'lucide-react';
+import { AppWindowMac, BriefcaseBusiness, LayoutGrid, MessageSquare, Search, User } from 'lucide-react';
 
 export const freelancerNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/freelancer/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Search Job',
+        href: '/freelancer/jobs/search',
+        icon: Search,
+    },
+    {
+        title: 'Job Applications',
+        href: '/freelancer/job-applications',
+        icon: AppWindowMac,
     },
     {
         title: 'Profile',

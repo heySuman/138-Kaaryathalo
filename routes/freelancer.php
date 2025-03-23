@@ -5,10 +5,12 @@ use App\Http\Controllers\Freelancer\FreelancerController;
 use App\Http\Controllers\Freelancer\CertificateController;
 use App\Http\Controllers\Freelancer\ExperienceController;
 use App\Http\Controllers\Freelancer\ProjectController;
+use App\Http\Controllers\JobApplication\JobApplicationController;
+use App\Http\Controllers\JobSearch\JobSearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
-    Route::get('dashboard', [FreelancerDashboardController::class, 'dashboard'])->name('freelancer.dashboard');
+    Route::get('dashboard', [FreelancerDashboardController::class, 'index'])->name('freelancer.dashboard');
 
     Route::get('profile', [FreelancerController::class, 'index'])->name('freelancer.profile');
     Route::post('profile', [FreelancerController::class, 'store'])->name('freelancer.profile.create');
@@ -26,4 +28,13 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::post('project', [ProjectController::class, 'store'])->name('freelancer.project.store');
     Route::patch('project/{project}', [ProjectController::class, 'update'])->name('freelancer.project.update');
     Route::delete('project/{project}', [ProjectController::class, 'destroy'])->name('freelancer.project.delete');
+
+    Route::get('/jobs/search', [JobSearchController::class, 'index'])->name('jobs.search');
+    Route::get('job/{jobPosting}', [JobSearchController::class, 'show'])->name('job.show');
+
+    Route::get('job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
+    Route::post('job-applications', [JobApplicationController::class, 'store'])->name('job-applications.store');
+    Route::get('job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
+    Route::patch('job-applications/{jobApplication}', [JobApplicationController::class, 'update'])->name('job-applications.update');
+    Route::delete('job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
 });

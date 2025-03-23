@@ -1,5 +1,5 @@
 import { IClient } from '@/types/client';
-import { ICategory } from '@/types/freelancer';
+import {ICategory, IFreelancer} from '@/types/freelancer';
 import { SharedData } from '@/types/index';
 
 export type JobPosting = {
@@ -19,6 +19,8 @@ export type JobPosting = {
     category_id: number;
     category?: ICategory;
     client?: IClient;
+    created_at?: string | Date;
+    updated_at?: string | Date;
 };
 
 export interface JobPostingFormErrors {
@@ -49,6 +51,7 @@ export interface PaginatedResponse<T> {
 
 export type JobPageProps = {
     jobs: PaginatedResponse<JobPosting>;
+    freelancer: IFreelancer | null;
 };
 
 export type JobIndexPageProps = SharedData<JobPageProps>;
@@ -63,5 +66,12 @@ interface JobCount {
     pending: number;
     'in progress': number;
     completed: number;
+    total: number;
+}
+
+interface AppliedJobCount {
+    pending: number;
+    rejected: number;
+    approved: number;
     total: number;
 }

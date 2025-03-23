@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
-import Overview from '@/pages/Dashboard/partials/Overview';
+import ClientOverview from '@/pages/Dashboard/partials/ClientOverview';
 import { SharedData } from '@/types';
 import { JobCount, JobPosting } from '@/types/job-postings';
 import { Head, usePage } from '@inertiajs/react';
@@ -31,7 +31,7 @@ export default function ClientDashboard() {
                             <TabsTrigger value="notifications">Notifications</TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className={'mt-6'}>
-                            <Overview jobCountStatus={jobStatusCount} latestJobPostings={latestJobPostings} />
+                            <ClientOverview jobCountStatus={jobStatusCount} latestJobPostings={latestJobPostings} />
                         </TabsContent>
                         <TabsContent value="analytics">Analytics</TabsContent>
                         <TabsContent value="notifications">Notification</TabsContent>

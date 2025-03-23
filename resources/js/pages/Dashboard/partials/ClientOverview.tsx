@@ -4,10 +4,10 @@ import {Button} from "@/components/ui/button";
 import {Badge} from "@/components/ui/badge";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Link} from "@inertiajs/react";
-import {JobPosting} from "@/types/job-postings";
+import {JobCount, JobPosting} from "@/types/job-postings";
 
-export default function Overview({jobCountStatus, latestJobPostings}: {
-    jobCountStatus: any,
+export default function ClientOverview({jobCountStatus, latestJobPostings}: {
+    jobCountStatus: JobCount,
     latestJobPostings: JobPosting[]
 }) {
     return (
@@ -53,12 +53,12 @@ export default function Overview({jobCountStatus, latestJobPostings}: {
                             </TableHeader>
                             <TableBody>
                                 {
-                                    latestJobPostings.map((job) => (
+                                    latestJobPostings && latestJobPostings.map((job) => (
                                         <TableRow key={job.id}>
                                             <TableCell className="font-medium">{job.id}</TableCell>
                                             <TableCell>
                                                 <div className={'flex gap-2'}>
-                                                    <Badge variant={'secondary'}>{job.category}</Badge>
+                                                    <Badge variant={'secondary'}>{job.category?.category}</Badge>
                                                     <Link href={route('client.job-posting.show', job.id)} className={"underline"}>
                                                         {job.title}
                                                     </Link>
