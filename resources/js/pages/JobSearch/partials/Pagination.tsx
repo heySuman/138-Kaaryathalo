@@ -1,60 +1,38 @@
+import { Button } from '@/components/ui/button';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
 import { JobPosting, PaginatedResponse } from '@/types/job-postings';
-import { Link } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 export default function PaginationLinks({ pagination }: { pagination: PaginatedResponse<JobPosting> }) {
+    const { current_page, last_page } = pagination;
+
+    const goToPage = (page: number) => {
+        if (page < 1 || page > last_page) return;
+        router.get(`/jobs-search?page=${page}`);
+    };
     return (
-        <div className="my-2 flex-wrap sm:flex sm:flex-1 sm:items-center sm:justify-between">
-            <p className="text-sm leading-5 text-gray-700">
-                Showing <span className="font-medium">{pagination.from}</span>/<span className="font-medium">{pagination.to} </span>(
-                <span className="font-medium">{pagination.total}</span> total)
-            </p>
-            <div>
-                <span className="relative z-0 inline-flex rounded-md shadow-sm">
-                    <span>
-                        {pagination.links.map((link, index) => {
-                            const key = link.label + index;
-                            if (link.active) {
-                                return (
-                                    <span key={key}>
-                                        <span
-                                            className="relative -ml-px inline-flex cursor-default items-center border border-gray-300 px-4 py-2 text-sm leading-5 font-medium"
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        ></span>
-                                    </span>
-                                );
-                            }
+        <Pagination className={'my-3'}>
+            <PaginationContent>
+                <PaginationItem>
+                    <Button variant="outline" onClick={() => goToPage(current_page - 1)} disabled={current_page === 1}>
+                        Previous
+                    </Button>
+                </PaginationItem>
 
-                            if (link.url === null) {
-                                return (
-                                    <span key={key}>
-                                        <span
-                                            className="relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm leading-5 font-medium"
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        ></span>
-                                    </span>
-                                );
-                            }
+                {Array.from({ length: last_page }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                        <PaginationLink isActive={page === current_page} onClick={() => goToPage(page)}>
+                            {page}
+                        </PaginationLink>
+                    </PaginationItem>
+                ))}
 
-                            return (
-                                <span key={key}>
-                                    <Link
-                                        href={link.url}
-                                        preserveState={true}
-                                        className="relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm leading-5 font-medium  hover:bg-gray-300"
-                                        dangerouslySetInnerHTML={{
-                                            __html: link.label,
-                                        }}
-                                    ></Link>
-                                </span>
-                            );
-                        })}
-                    </span>
-                </span>
-            </div>
-        </div>
+                <PaginationItem>
+                    <Button variant="outline" onClick={() => goToPage(current_page + 1)} disabled={current_page === last_page}>
+                        Next
+                    </Button>
+                </PaginationItem>
+            </PaginationContent>
+        </Pagination>
     );
 }

@@ -1,6 +1,7 @@
 import { IClient } from '@/types/client';
-import {ICategory, IFreelancer} from '@/types/freelancer';
+import { ICategory, IFreelancer } from '@/types/freelancer';
 import { SharedData } from '@/types/index';
+import { JobApplication } from '@/types/job-application';
 
 export type JobPosting = {
     id: number;
@@ -19,6 +20,7 @@ export type JobPosting = {
     category_id: number;
     category?: ICategory;
     client?: IClient;
+    application?: JobApplication[];
     created_at?: string | Date;
     updated_at?: string | Date;
 };
@@ -52,6 +54,7 @@ export interface PaginatedResponse<T> {
 export type JobPageProps = {
     jobs: PaginatedResponse<JobPosting>;
     freelancer: IFreelancer | null;
+    category: ICategory[];
 };
 
 export type JobIndexPageProps = SharedData<JobPageProps>;

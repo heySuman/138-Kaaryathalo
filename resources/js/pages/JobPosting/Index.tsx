@@ -81,6 +81,7 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                                     <TableRow>
                                         <TableHead className="w-[100px]">Job Id</TableHead>
                                         <TableHead>Job Title</TableHead>
+                                        <TableHead>Applications</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="">Actions</TableHead>
                                     </TableRow>
@@ -98,6 +99,7 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                                                         </Link>
                                                     </div>
                                                 </TableCell>
+                                                <TableCell>{job.application?.length || 0}</TableCell>
                                                 <TableCell>{job.status}</TableCell>
                                                 <TableCell className="flex gap-2">
                                                     <Link href={route('client.job-posting.edit', job.id)}>

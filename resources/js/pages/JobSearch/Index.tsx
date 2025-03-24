@@ -1,18 +1,18 @@
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
+import ProfileRequiredCard from '@/pages/Freelancer/partials/popup-dialog/alert-create-profile';
 import FilterJob from '@/pages/JobSearch/partials/FilterJob';
 import JobCard from '@/pages/JobSearch/partials/JobCard';
 import PaginationLinks from '@/pages/JobSearch/partials/Pagination';
 import { FilterType } from '@/types/filter';
-import {JobIndexPageProps, JobPosting} from '@/types/job-postings';
+import { JobIndexPageProps, JobPosting } from '@/types/job-postings';
 import { Head, router, useForm } from '@inertiajs/react';
 import { FormEvent } from 'react';
-import ProfileRequiredCard from "@/pages/Freelancer/partials/popup-dialog/alert-create-profile";
 
-export default function Index({ jobs, freelancer }: JobIndexPageProps) {
+export default function Index({ jobs, freelancer, category }: JobIndexPageProps) {
     const data = useForm<FilterType>({
         title: '',
-        category: '',
+        category_id: null,
         experience: 'fresher',
         maxBudget: 0,
         minBudget: 0,
@@ -27,8 +27,8 @@ export default function Index({ jobs, freelancer }: JobIndexPageProps) {
             filterData.title = data.data.title.trim();
         }
 
-        if (data.data.category && data.data.category.trim() !== '') {
-            filterData.category = data.data.category.trim();
+        if (data.data.category_id && data.data.category_id > 0) {
+            filterData.category_id = data.data.category_id;
         }
 
         if (data.data.minBudget && data.data.minBudget > 0) {
@@ -65,7 +65,7 @@ export default function Index({ jobs, freelancer }: JobIndexPageProps) {
 
                     <Separator className="mb-4" />
 
-                    <FilterJob data={data} setData={data.setData} handleSubmit={handleSubmit} />
+                    <FilterJob data={data} setData={data.setData} handleSubmit={handleSubmit} category={category} />
 
                     {/*  Show the listings*/}
                     <div className={'my-10 flex flex-col gap-3'}>

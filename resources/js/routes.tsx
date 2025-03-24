@@ -35,6 +35,11 @@ export const clientNavItems: NavItem[] = [
         icon: BriefcaseBusiness,
     },
     {
+        title: 'Job Applications',
+        href: '/client/job-applications',
+        icon: AppWindowMac,
+    },
+    {
         title: 'Inbox',
         href: '/inbox',
         icon: MessageSquare,

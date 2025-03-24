@@ -16,7 +16,7 @@ import { IFreelancer } from '@/types/freelancer';
 import { JobApplication } from '@/types/job-application';
 import { JobPosting } from '@/types/job-postings';
 import { Input } from '@headlessui/react';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import React, { ChangeEvent, useState } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
@@ -32,7 +32,7 @@ export default function ApplyJob({
     applied: JobApplication | null;
 }) {
     const { data, setData, post, processing, errors } = useForm<Partial<JobApplication>>({
-        job_id: jobPosting.id,
+        job_posting_id: jobPosting.id,
         freelancer_id: freelancer?.id,
         cover_letter: '',
         proposed_budget: 0,
@@ -63,9 +63,11 @@ export default function ApplyJob({
                         Apply
                     </Button>
                 ) : (
-                    <Button variant="link" className={'underline'}>
-                        View Application
-                    </Button>
+                    <Link href={route('job-applications.index')}>
+                        <Button variant="link" className={'underline'}>
+                            View Application
+                        </Button>
+                    </Link>
                 )}
             </AlertDialogTrigger>
             {isOpen && (
@@ -80,7 +82,7 @@ export default function ApplyJob({
                                     type="number"
                                     step="0.01"
                                     className="w-full rounded border p-2"
-                                    value={data.proposed_budget}
+                                    value={data.proposed_budget || ''}
                                     onChange={(e) => setData('proposed_budget', Number(e.target.value))}
                                 />
                                 {errors.proposed_budget && <p className="text-sm text-red-500">{errors.proposed_budget}</p>}

@@ -35,6 +35,5 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::get('job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
     Route::post('job-applications', [JobApplicationController::class, 'store'])->name('job-applications.store');
     Route::get('job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
-    Route::patch('job-applications/{jobApplication}', [JobApplicationController::class, 'update'])->name('job-applications.update');
     Route::delete('job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
 });

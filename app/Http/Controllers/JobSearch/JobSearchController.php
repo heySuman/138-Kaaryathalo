@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\JobSearch;
 
 use App\Http\Controllers\Controller;
-use App\Models\Client;
+use App\Models\Freelancer\Category;
 use App\Models\Freelancer\Freelancer;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
@@ -25,8 +25,8 @@ class JobSearchController extends Controller
             $query->where('title', 'ILIKE', '%' . $request->title . '%');
         }
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
         }
 
         if ($request->filled('experience')) {
@@ -48,6 +48,7 @@ class JobSearchController extends Controller
 
         return inertia('JobSearch/Index', [
             'jobs' => $jobs,
+            'category' => Category::all(),
             'freelancer' => $freelancer ?? null,
         ]);
     }
@@ -61,7 +62,7 @@ class JobSearchController extends Controller
 
         $applied = $freelancer
             ? JobApplication::where('freelancer_id', $freelancer->id)
-                ->where('job_id', $jobPosting->id)
+                ->where('job_posting_id', $jobPosting->id)
                 ->first()
             : null;
 

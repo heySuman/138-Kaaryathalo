@@ -24,7 +24,7 @@ class JobPostingController extends Controller
         return Inertia::render('JobPosting/Index', [
             'client' => $client ?? null,
             'jobPostings' => $client
-                ? JobPosting::where('client_id', $client->id)->with('category', 'client')->latest()->paginate(10)
+                ? JobPosting::where('client_id', $client->id)->with('category', 'client', 'application.freelancer.user')->latest()->paginate(10)
                 : null,
         ]);
     }
@@ -74,7 +74,7 @@ class JobPostingController extends Controller
     public function show(JobPosting $jobPosting): Response
     {
         // Load the related category and client relationships
-        $jobPosting->load('category', 'client');
+        $jobPosting->load('category', 'client','application.freelancer.user');
 
         // Return the view with the job posting data
         return Inertia::render('JobPosting/Show', [

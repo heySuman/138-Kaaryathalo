@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Freelancer\Freelancer;
 use App\Models\JobApplication;
+use App\Models\JobPosting;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,30 +22,29 @@ class JobApplicationController extends Controller
     public function index(): Response
     {
         $user = Auth::user();
-        $freelancer = Freelancer::where('user_id', $user->id)->first();
-        $client = Client::where('user_id', $user->id)->first();
 
         if ($user->role === "freelancer") {
-            // Show only applications submitted by the logged-in freelancer
-            $applications = JobApplication::with(['job', 'freelancer'])
-                ->where('freelancer_id', $freelancer->id)
-                ->latest()
-                ->paginate(10);
-        } elseif ($user->role === "client") {
-            // Show only applications for jobs posted by the logged-in client
-            $applications = JobApplication::with(['job', 'freelancer'])
-                ->whereHas('job', function ($query) use ($user) {
-                    $query->where('client_id', $client->id);
+            // Show applications submitted by the freelancer
+            $applications = JobApplication::with(['job', 'freelancer.user'])
+                ->whereHas('freelancer', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
                 })
                 ->latest()
                 ->paginate(10);
+        } elseif ($user->role === "client") {
+            // Fetch applications grouped by jobs for the client
+            $applications = JobPosting::with(['applications.freelancer.user'])
+                ->where('client_id', $user->client->id) // Use relationship
+                ->latest()
+                ->paginate(10);
+        } else {
+            abort(403, "Unauthorized access.");
         }
 
         return Inertia::render('JobApplication/Index', [
-            'applications' => $applications ?? null
+            'applications' => $applications
         ]);
     }
-
 
     /**
      * Store a newly created job application.
@@ -51,7 +52,7 @@ class JobApplicationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'job_id' => 'required|exists:job_postings,id',
+            'job_posting_id' => 'required|exists:job_postings,id',
             'freelancer_id' => 'required|exists:freelancers,id',
             'cover_letter' => 'nullable|string',
             'proposed_budget' => 'required|numeric|min:0',
@@ -61,11 +62,12 @@ class JobApplicationController extends Controller
 
         if ($request->hasFile('attachments')) {
             $validated['attachments'] = collect($request->file('attachments'))->map(function ($file) {
-                return $file->store('attachments', 'public');
-            })->toJson();
+                return Cloudinary::upload($file->getRealPath())->getSecurePath();
+            })->all();
         }
 
         JobApplication::create($validated);
+
         return redirect()->route('job-applications.index');
     }
 
@@ -80,16 +82,24 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Update the specified job application.
+     * Update the status of a job application.
      */
     public function update(Request $request, JobApplication $jobApplication): RedirectResponse
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,accepted,rejected'
+            'status' => 'required|in:pending,approved,rejected'
         ]);
 
+        // If approved, reject all other applications for the same job
+        if ($validated['status'] === 'approved') {
+            JobApplication::where('job_posting_id', $jobApplication->job_posting_id)
+                ->where('id', '!=', $jobApplication->id)
+                ->update(['status' => 'rejected']);
+        }
+
         $jobApplication->update($validated);
-        return redirect()->route('job-applications.index');
+
+        return back()->with('success', 'Application updated successfully.');
     }
 
     /**

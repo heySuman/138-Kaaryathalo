@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Freelancer\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobPosting extends Model
 {
@@ -43,5 +44,10 @@ class JobPosting extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function application(): HasMany
+    {
+        return $this->HasMany(JobApplication::class);
     }
 }
