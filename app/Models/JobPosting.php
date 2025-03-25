@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Freelancer\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobPosting extends Model
@@ -33,7 +34,7 @@ class JobPosting extends Model
     /**
      * Get the category associated with the job posting.
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -41,7 +42,7 @@ class JobPosting extends Model
     /**
      * Get the client associated with the job posting.
      */
-    public function client()
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
     }

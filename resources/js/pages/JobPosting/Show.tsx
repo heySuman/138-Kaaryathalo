@@ -3,13 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
-import {Head, Link, useForm} from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Calendar, CheckCircle, Clock, Pencil, Weight } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 
 export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     console.log(jobPosting);
-    const {patch} = useForm()
+    const { data, patch } = useForm({
+        status: 'accepted',
+    });
     return (
         <AppLayout>
             <Head title={jobPosting.title} />
@@ -76,7 +78,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                 ))}
                             </ul>
                         </section>
-                        <section >
+                        <section>
                             <Table className={'rounded border'}>
                                 <TableHeader>
                                     <TableRow>
@@ -98,7 +100,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    disabled={application.status === 'approved' || application.status === 'rejected'}
+                                                    disabled={application.status === 'accepted' || application.status === 'rejected'}
                                                     onClick={() => patch(route('job-applications.update', application))}
                                                 >
                                                     Approve
@@ -108,6 +110,12 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                     ))}
                                 </TableBody>
                             </Table>
+                        </section>
+
+                        <section>
+                            <Link href={route('milestones.create', jobPosting.application)}>
+                                <Button>Create Milestone</Button>
+                            </Link>
                         </section>
                     </div>
                 </div>

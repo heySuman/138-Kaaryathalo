@@ -9,7 +9,7 @@ export default function FreelancerOverview({ jobCountStatus }: { jobCountStatus:
                 {[
                     { title: 'Job Status Pending', value: jobCountStatus['pending'], icon: Activity },
                     { title: 'Jobs Rejected', value: jobCountStatus['rejected'], icon:  CircleXIcon},
-                    { title: 'Jobs Approved', value: jobCountStatus['approved'], icon: CircleCheckBig },
+                    { title: 'Jobs Approved', value: jobCountStatus['accepted'], icon: CircleCheckBig },
                     { title: 'Total Jobs Applied', value: jobCountStatus['total'], icon: GalleryVerticalEnd },
                 ].map((item, index) => (
                     <Card key={index}>

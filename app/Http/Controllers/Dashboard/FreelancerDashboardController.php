@@ -28,13 +28,15 @@ class FreelancerDashboardController extends Controller
             "pending" => JobApplication::where("freelancer_id", $freelancer->id)->where("status", "pending")->count(),
             "rejected" => JobApplication::where("freelancer_id", $freelancer->id)->where("status", "rejected")
                 ->count(),
-            "approved" => JobApplication::where("freelancer_id", $freelancer->id)->where("status", "approved")
+            "accepted" => JobApplication::where("freelancer_id", $freelancer->id)->where("status", "accepted")
                 ->count(),
             "total" => JobApplication::where("freelancer_id", $freelancer->id)->count(),
         ];
 
         return Inertia::render('Dashboard/Freelancer/FreelancerDashboard', [
-            'jobStatusCount' => $appliedJobCountStatus
+            'jobStatusCount' => $appliedJobCountStatus,
+            'jobApplication' => JobApplication::where('freelancer_id', $freelancer->id)->with(['job'])
+                ->paginate(10),
         ]);
     }
 }

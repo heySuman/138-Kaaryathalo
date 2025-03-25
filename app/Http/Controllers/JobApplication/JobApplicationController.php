@@ -87,16 +87,17 @@ class JobApplicationController extends Controller
     public function update(Request $request, JobApplication $jobApplication): RedirectResponse
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,approved,rejected'
+            'status' => 'required|in:pending,accepted,rejected'
         ]);
 
         // If approved, reject all other applications for the same job
-        if ($validated['status'] === 'approved') {
+        if ($validated['status'] === 'accepted') {
             JobApplication::where('job_posting_id', $jobApplication->job_posting_id)
                 ->where('id', '!=', $jobApplication->id)
                 ->update(['status' => 'rejected']);
         }
 
+        $jobApplication->job()->update(['status' => 'in progress']);
         $jobApplication->update($validated);
 
         return back()->with('success', 'Application updated successfully.');

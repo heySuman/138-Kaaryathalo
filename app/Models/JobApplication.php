@@ -3,6 +3,7 @@
 namespace App\Models;
 use App\Models\Freelancer\Freelancer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class JobApplication extends Model
 {
@@ -22,7 +23,7 @@ class JobApplication extends Model
     /**
      * Relationship with JobPosting
      */
-    public function job()
+    public function job(): BelongsTo
     {
         return $this->belongsTo(JobPosting::class, 'job_posting_id');
     }
@@ -30,8 +31,12 @@ class JobApplication extends Model
     /**
      * Relationship with Freelancer
      */
-    public function freelancer()
+    public function freelancer(): BelongsTo
     {
         return $this->belongsTo(Freelancer::class, 'freelancer_id');
+    }
+
+    public function milestones(){
+        return $this->hasMany(Milestone::class, 'job_application_id');
     }
 }

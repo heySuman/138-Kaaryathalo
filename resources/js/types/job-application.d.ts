@@ -7,7 +7,7 @@ export type JobApplication = {
     freelancer_id: number;
     cover_letter: string;
     proposed_budget: number;
-    status: 'pending' | 'approved' | 'rejected';
+    status: 'pending' | 'accepted' | 'rejected';
     attachments: File[] | string[] | null;
 
     job: JobPosting;

@@ -11,7 +11,8 @@ type dashboardPageProps = {
 };
 
 export default function FreelancerDashboard() {
-    const { jobStatusCount } = usePage<SharedData<dashboardPageProps>>().props;
+    const { jobStatusCount, jobApplication } = usePage<SharedData<dashboardPageProps>>().props;
+    console.log(jobApplication)
     return (
         <AppLayout>
             <Head title={'Dashboard'} />

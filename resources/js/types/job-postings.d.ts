@@ -75,6 +75,6 @@ interface JobCount {
 interface AppliedJobCount {
     pending: number;
     rejected: number;
-    approved: number;
+    accepted: number;
     total: number;
 }
