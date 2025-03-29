@@ -1,10 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Separator } from '@/components/ui/separator';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Calendar, CheckCircle, Clock, Pencil, Weight } from 'lucide-react';
+import {formatDistance, formatDistanceToNow, subDays} from 'date-fns';
+import { ArrowLeft, Award, Pencil, Tag } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 
 export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
@@ -14,7 +16,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     });
     return (
         <AppLayout>
-            <Head title={jobPosting.title} />
+            <Head title={jobPosting.title.replace(/^./, jobPosting.title[0].toUpperCase())} />
 
             <div className="pt-6">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -28,10 +30,10 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
 
             <div className="pt-6">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-4">
-                    <div className="my-4 space-y-8 lg:w-3/4">
+                    <div className="my-4 space-y-8 border-r lg:w-3/4">
                         <div className="space-y-4">
                             <div className={'flex flex-wrap items-center gap-2'}>
-                                <h1 className="text-4xl font-bold">{jobPosting.title}</h1>
+                                <h1 className="text-4xl font-bold capitalize">{jobPosting.title}</h1>
                                 <div className="flex gap-2">
                                     <Link href={route('client.job-posting.edit', jobPosting.id)}>
                                         <Button variant="outline" size="sm">
@@ -44,57 +46,71 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         </div>
 
                         <div className="flex flex-wrap gap-4">
-                            <Badge variant="secondary" className="flex items-center">
-                                <Clock className="mr-1 h-4 w-4" /> {jobPosting.timeline}
-                            </Badge>
-                            <Badge variant="secondary" className="flex items-center">
-                                <span>
-                                    Rs. {jobPosting.budget} {jobPosting.payment_type}
-                                </span>
-                            </Badge>
-                            <Badge variant="secondary" className="flex items-center">
-                                <Weight className="mr-1 h-4 w-4" /> {jobPosting.experience_level}
-                            </Badge>
-                            {jobPosting.expiry_date && (
-                                <Badge variant="secondary" className="flex items-center">
-                                    <Calendar className="mr-1 h-4 w-4" /> Valid until {new Date(jobPosting.expiry_date).toLocaleDateString()}
-                                </Badge>
-                            )}
+                            <p className={'text-gray-500'}>
+                                Posted {formatDistanceToNow(new Date(jobPosting.created_at as string), { addSuffix: true })}
+                            </p>
+                        </div>
+                        <Separator />
+
+                        <div className="space-y-4">
+                            <h2 className="text-2xl font-semibold">Job Description</h2>
+                            <div
+                                className="prose mb-4 capitalize"
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(jobPosting.description) || '' }}
+                            ></div>
                         </div>
 
-                        <section className="space-y-4">
-                            <h2 className="text-2xl font-semibold">Job Description</h2>
-                            <div className="prose mb-4" dangerouslySetInnerHTML={{ __html: sanitizeHtml(jobPosting.description) || '' }}></div>
-                        </section>
+                        <Separator />
+                        <div className="flex flex-wrap gap-4">
+                            <div className={'flex w-1/2 flex-wrap items-center gap-2'}>
+                                <Tag />
+                                <p>
+                                    Rs. {jobPosting.budget} {jobPosting.payment_type}
+                                </p>
+                            </div>
+                            <div className={'flex flex-wrap items-center gap-2'}>
+                                <Award />
+                                <p className={'capitalize'}>{jobPosting.experience_level}</p>
+                            </div>
+                            <div className={'flex flex-wrap items-center gap-2'}>
+                                <Award />
+                                <p className={'capitalize'}>{jobPosting.experience_level}</p>
+                            </div>
+                        </div>
 
-                        <section className="space-y-4">
-                            <h2 className="text-2xl font-semibold">Skills Requirements</h2>
-                            <ul className="list-none space-y-2">
+                        <Separator />
+
+                        <div className="space-y-4">
+                            <h2 className="text-2xl font-semibold">Skills and Expertise</h2>
+                            <div className="list-none space-y-2">
                                 {jobPosting.skills.map((item, index) => (
-                                    <li key={index} className="flex items-start">
-                                        <CheckCircle className="mt-1 mr-2 h-5 w-5 flex-shrink-0 text-green-500" />
+                                    <Badge key={index} variant="secondary">
                                         <span>{item}</span>
-                                    </li>
+                                    </Badge>
                                 ))}
-                            </ul>
-                        </section>
+                            </div>
+                        </div>
+
+                        <Separator />
+
                         <section>
+                            <h1 className={'mb-5 text-2xl font-bold'}>Applications</h1>
                             <Table className={'rounded border'}>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[100px]">Application</TableHead>
-                                        <TableHead className="w-[100px]">Freelancer</TableHead>
-                                        <TableHead className="w-[100px]">Status</TableHead>
-                                        <TableHead>Actions</TableHead>
+                                        <TableHead className={'rounded-tl-lg'}>Application</TableHead>
+                                        <TableHead>Freelancer</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead className={'rounded-tr-lg'}>Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {jobPosting.application?.map((application) => (
                                         <TableRow key={application.id}>
                                             <TableCell className="font-medium">{application.id}</TableCell>
-                                            <TableCell>{application.freelancer.user.name}</TableCell>
+                                            <TableCell className={'col-span-3 capitalize'}>{application.freelancer.user.name}</TableCell>
                                             <TableCell>
-                                                <Badge>{application.status}</Badge>
+                                                <Badge className={'capitalize'}>{application.status}</Badge>
                                             </TableCell>
                                             <TableCell className="flex gap-2">
                                                 <Button
@@ -109,13 +125,18 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                         </TableRow>
                                     ))}
                                 </TableBody>
+                                {jobPosting.application && jobPosting.application?.length < 1 && (
+                                    <TableCaption>No applications is found</TableCaption>
+                                )}
                             </Table>
                         </section>
 
                         <section>
-                            <Link href={route('milestones.create', jobPosting.application)}>
-                                <Button>Create Milestone</Button>
-                            </Link>
+                            {jobPosting.application && jobPosting.application?.length > 0 && (
+                                <Link href={route('milestones.create', jobPosting.application)}>
+                                    <Button>Create Milestone</Button>
+                                </Link>
+                            )}
                         </section>
                     </div>
                 </div>

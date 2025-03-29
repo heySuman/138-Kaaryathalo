@@ -25,12 +25,13 @@ class JobApplicationController extends Controller
 
         if ($user->role === "freelancer") {
             // Show applications submitted by the freelancer
-            $applications = JobApplication::with(['job', 'freelancer.user'])
+            $applications = JobApplication::with(['job', 'freelancer.user', 'job.category'])
                 ->whereHas('freelancer', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
                 ->latest()
                 ->paginate(10);
+
         } elseif ($user->role === "client") {
             // Fetch applications grouped by jobs for the client
             $applications = JobPosting::with(['applications.freelancer.user'])

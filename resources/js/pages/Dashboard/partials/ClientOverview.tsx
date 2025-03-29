@@ -14,9 +14,9 @@ export default function ClientOverview({jobCountStatus, latestJobPostings}: {
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 {[
-                    {title: "Active Jobs", value: jobCountStatus["pending"], icon: Activity},
-                    {title: "Completed Jobs", value: jobCountStatus["in progress"], icon: CircleCheckBig},
-                    {title: "Pending Jobs", value: jobCountStatus["completed"], icon: CircleDashed},
+                    {title: "Pending Jobs", value: jobCountStatus["pending"], icon: Activity},
+                    {title: "In Progress Jobs", value: jobCountStatus["in progress"], icon: CircleCheckBig},
+                    {title: "Completed Jobs", value: jobCountStatus["completed"], icon: CircleDashed},
                     {title: "Total Jobs", value: jobCountStatus["total"], icon: GalleryVerticalEnd},
                 ].map((item, index) => (
                     <Card key={index}>
@@ -43,7 +43,7 @@ export default function ClientOverview({jobCountStatus, latestJobPostings}: {
                 </CardHeader>
                 <CardContent>
                     <div className="mt-2 overflow-x-scroll lg:overflow-x-hidden">
-                        <Table className={'w-full border rounded-md mt-3'}>
+                        <Table className={'w-full border rounded-md mt-3 capitalize'}>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Job ID</TableHead>

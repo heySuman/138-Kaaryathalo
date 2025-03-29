@@ -11,6 +11,7 @@ import { X } from 'lucide-react';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import {toast, Toaster} from "sonner";
 
 interface JobPostingFormProps {
     categories: ICategory[];
@@ -36,7 +37,10 @@ export default function JobPostingForm({ categories }: JobPostingFormProps) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         post(route('client.job-posting.store'), {
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                toast.success("Job Posting added successfully.")
+                reset();
+            },
             onError: () => {
                 console.log(errors);
             },
@@ -220,7 +224,7 @@ export default function JobPostingForm({ categories }: JobPostingFormProps) {
                 {errors.visibility && <InputError message={errors.visibility} className="mt-2" />}
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-4">
+            <div className="my-6 flex items-center justify-end gap-4">
                 <Link href={route('client.job-posting.index')}>
                     <Button variant="outline" type="button">
                         Cancel
@@ -230,6 +234,7 @@ export default function JobPostingForm({ categories }: JobPostingFormProps) {
                     Create Job Posting
                 </Button>
             </div>
+            <Toaster/>
         </form>
     );
 }

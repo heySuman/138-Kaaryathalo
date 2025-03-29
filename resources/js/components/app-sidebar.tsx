@@ -17,7 +17,7 @@ export function AppSidebar() {
     const mainNavItems = auth.user.role === 'freelancer' ? freelancerNavItems : clientNavItems;
     const role = auth.user.role;
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="sidebar">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

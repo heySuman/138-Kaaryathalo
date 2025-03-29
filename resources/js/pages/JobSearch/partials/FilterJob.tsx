@@ -23,7 +23,7 @@ export default function FilterJob({
     const [showFilters, setShowFilters] = useState(false);
 
     return (
-        <Card>
+        <Card className={'py-3'}>
             <CardContent className="px-4">
                 <form onSubmit={handleSubmit} className="">
                     <div className="flex flex-wrap items-center justify-between gap-1">

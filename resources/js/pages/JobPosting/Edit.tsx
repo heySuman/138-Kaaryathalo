@@ -57,7 +57,7 @@ export default function Edit({ categories, jobPosting }: JobPostingFormProps) {
     return (
         <AppLayout>
             <Head title={'Update Job Posting'} />
-            <div className="bg-white pt-6">
+            <div className="pt-6">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-2 flex items-center justify-between">
                         <Button variant={'link'} className={'p-0 text-slate-600'} onClick={() => window.history.back()}>
@@ -241,7 +241,7 @@ export default function Edit({ categories, jobPosting }: JobPostingFormProps) {
                             {errors.visibility && <InputError message={errors.visibility} className="mt-2" />}
                         </div>
 
-                        <div className="mt-6 flex items-center justify-end gap-4">
+                        <div className="my-6 flex items-center justify-end gap-4">
                             <Link href={route('client.job-posting.index')}>
                                 <Button variant="outline" type="button">
                                     Cancel

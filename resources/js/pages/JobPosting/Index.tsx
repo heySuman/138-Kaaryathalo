@@ -76,7 +76,7 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                         </div>
 
                         <div className="mt-2">
-                            <Table className={'mt-3 w-full rounded border'}>
+                            <Table className={'mt-3 w-full rounded border capitalize'}>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="w-[100px]">Job Id</TableHead>

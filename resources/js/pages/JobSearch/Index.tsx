@@ -56,7 +56,7 @@ export default function Index({ jobs, freelancer, category }: JobIndexPageProps)
             <Head title="Job Postings" />
             {!freelancer && <ProfileRequiredCard variant={'freelancer'} />}
             <div className="pt-6">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl px-4 sm:px-6 lg:px-8 w-1/2">
                     <div className="mb-5 flex items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-black">Search Jobs</h2>
@@ -68,7 +68,7 @@ export default function Index({ jobs, freelancer, category }: JobIndexPageProps)
                     <FilterJob data={data} setData={data.setData} handleSubmit={handleSubmit} category={category} />
 
                     {/*  Show the listings*/}
-                    <div className={'my-10 flex flex-col gap-3'}>
+                    <div className={'my-10 flex flex-col'}>
                         {jobs.data.length > 0 ? (
                             jobs.data.map((job: JobPosting) => <JobCard job={job} key={job.id} />)
                         ) : (
