@@ -5,7 +5,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
-import {formatDistance, formatDistanceToNow, subDays} from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ArrowLeft, Award, Pencil, Tag } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 
@@ -14,6 +14,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     const { data, patch } = useForm({
         status: 'accepted',
     });
+
     return (
         <AppLayout>
             <Head title={jobPosting.title.replace(/^./, jobPosting.title[0].toUpperCase())} />
@@ -137,6 +138,9 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                     <Button>Create Milestone</Button>
                                 </Link>
                             )}
+                        </section>
+
+                        <section>
                         </section>
                     </div>
                 </div>

@@ -74,7 +74,7 @@ class JobPostingController extends Controller
     public function show(JobPosting $jobPosting): Response
     {
         // Load the related category and client relationships
-        $jobPosting->load('category', 'client','application.freelancer.user');
+        $jobPosting->load('category', 'client','application.freelancer.user', 'application.milestones');
 
         // Return the view with the job posting data
         return Inertia::render('JobPosting/Show', [

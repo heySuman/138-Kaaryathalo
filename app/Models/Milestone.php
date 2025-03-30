@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Milestone extends Model
 {
     protected $fillable = [
-        'job_application_id',
+        'job_posting_id',
         'title',
         'description',
         'due_date',
         'status',
     ];
 
-    public function jobApplication(): BelongsTo
+    public function jobs(): BelongsTo
     {
-        return $this->belongsTo(JobApplication::class);
+        return $this->belongsTo(JobPosting::class);
     }
 }

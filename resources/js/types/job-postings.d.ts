@@ -1,7 +1,7 @@
 import { IClient } from '@/types/client';
 import { ICategory, IFreelancer } from '@/types/freelancer';
 import { SharedData } from '@/types/index';
-import { JobApplication } from '@/types/job-application';
+import { JobApplication, Milestone } from '@/types/job-application';
 
 export type JobPosting = {
     id: number;
@@ -21,6 +21,7 @@ export type JobPosting = {
     category?: ICategory;
     client?: IClient;
     application?: JobApplication[];
+    milestones: Milestone[];
     created_at?: string | Date;
     updated_at?: string | Date;
 };

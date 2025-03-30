@@ -23,14 +23,17 @@ export default function Create() {
         title: '',
         description: '',
         due_date: undefined,
-        job_application_id: Number(usePage().props.jobApplicationId),
+        job_posting_id: Number(usePage().props.jobPostingId),
         status: 'pending',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('milestones.store', { jobApplication: data.job_application_id }), {
-            onSuccess: () => toast('Milestone Added!'),
+        post(route('milestones.store', { jobPosting: data.job_posting_id }), {
+            onSuccess: () => {
+                toast('Milestone Added!');
+                window.history.back();
+            },
         });
     };
 

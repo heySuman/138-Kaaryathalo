@@ -12,4 +12,14 @@ export type JobApplication = {
 
     job: JobPosting;
     freelancer: IFreelancer;
+
+};
+
+export type Milestone = {
+    id: number;
+    job_application_id: number;
+    title: string;
+    description: string;
+    due_date: string | Date | null;
+    status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
 };
