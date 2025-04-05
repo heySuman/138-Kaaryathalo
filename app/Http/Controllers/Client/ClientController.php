@@ -34,7 +34,7 @@ class ClientController extends Controller
 
         if ($request->hasFile('profile_picture')) {
             $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
-                'folder' => 'profile_pictures'
+                'folder' => 'profile_pictures',
             ]);
             $profilePictureUrl = $uploadedFile->getSecurePath();
         }

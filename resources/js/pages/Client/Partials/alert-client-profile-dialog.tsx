@@ -89,7 +89,7 @@ export default function ClientProfileDialog({ client }: { client: IClient | null
                                         <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
                                     </Avatar>
                                 </div>
-                                <Input type="file" id="avatar" className="" onChange={handleFileChange} />
+                                <Input type="file" id="avatar" className="dark:text-white" onChange={handleFileChange} />
 
                                 <InputError className="mt-2" message={errors.profile_picture} />
                             </div>
@@ -101,7 +101,7 @@ export default function ClientProfileDialog({ client }: { client: IClient | null
                                 placeholder="Your Company Name"
                                 value={data.company_name}
                                 required
-                                className={'text-black'}
+                                className={'text-black dark:text-white'}
                                 onChange={(e) => setData('company_name', e.target.value)}
                             />
                             {errors.company_name && <p className="text-red-500">{errors.company_name}</p>}
@@ -113,7 +113,7 @@ export default function ClientProfileDialog({ client }: { client: IClient | null
                                 placeholder="Industry (e.g., Tech, Marketing)"
                                 value={data.industry}
                                 required
-                                className={'text-black'}
+                                className={'text-black dark:text-white'}
                                 onChange={(e) => setData('industry', e.target.value)}
                             />
                             {errors.industry && <p className="text-red-500">{errors.industry}</p>}
@@ -126,7 +126,7 @@ export default function ClientProfileDialog({ client }: { client: IClient | null
                                 value={data.about}
                                 rows={5}
                                 required
-                                className={'text-black'}
+                                className={'text-black dark:text-white'}
                                 onChange={(e) => setData('about', e.target.value)}
                             />
                             {errors.about && <p className="text-red-500">{errors.about}</p>}

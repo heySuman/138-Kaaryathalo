@@ -25,7 +25,7 @@ export default function JobCard({ job }: { job: JobPosting }) {
                 </div>
             </CardHeader>
             <CardContent className="">
-                <div className="prose mb-4 capitalize" dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) || '' }}></div>
+                <div className="prose mb-4 capitalize line-clamp-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(job.description) || '' }}></div>
                 <div className="mb-3 flex flex-wrap gap-2">
                     {job.skills.map((skill: string, index: number) => (
                         <Badge key={index} variant="secondary" className="font-normal">

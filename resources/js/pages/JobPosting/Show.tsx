@@ -6,12 +6,16 @@ import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Award, Pencil, Tag } from 'lucide-react';
+import { ArrowLeft, Award, Calendar, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 
 export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     console.log(jobPosting);
-    const { data, patch } = useForm({
+    const {
+        data,
+        patch,
+        delete: destroy,
+    } = useForm({
         status: 'accepted',
     });
 
@@ -62,8 +66,8 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         </div>
 
                         <Separator />
-                        <div className="flex flex-wrap gap-4">
-                            <div className={'flex w-1/2 flex-wrap items-center gap-2'}>
+                        <div className="flex flex-wrap justify-between gap-4 px-3">
+                            <div className={'flex flex-wrap items-center gap-2'}>
                                 <Tag />
                                 <p>
                                     Rs. {jobPosting.budget} {jobPosting.payment_type}
@@ -74,8 +78,8 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                 <p className={'capitalize'}>{jobPosting.experience_level}</p>
                             </div>
                             <div className={'flex flex-wrap items-center gap-2'}>
-                                <Award />
-                                <p className={'capitalize'}>{jobPosting.experience_level}</p>
+                                <Calendar />
+                                <p className={'capitalize'}>{jobPosting.timeline}</p>
                             </div>
                         </div>
 
@@ -93,7 +97,45 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         </div>
 
                         <Separator />
+                        <section>
+                            <div className={'flex gap-2'}>
+                                <h1 className={'mb-5 text-2xl font-bold'}>Milestones</h1>
+                                {jobPosting.application && (
+                                    <Link href={route('milestones.create', jobPosting.id)}>
+                                        <Button variant={'outline'}>
+                                            <Plus />
+                                        </Button>
+                                    </Link>
+                                )}
+                            </div>
 
+                            <div>
+                                {jobPosting.milestones &&
+                                    jobPosting.milestones.map((milestone) => (
+                                        <div key={milestone.id} className={'my-3 border-b p-2'}>
+                                            <div className={'flex items-center gap-2'}>
+                                                <h2 className={'mb-2 text-xl font-bold capitalize'}>{milestone.title}</h2>
+                                                <Link href={route('milestones.edit', milestone)}>
+                                                    <Button variant={'outline'} size={'sm'}>
+                                                        <Pencil />
+                                                    </Button>
+                                                </Link>{' '}
+                                                <Button
+                                                    variant={'destructive'}
+                                                    size={'sm'}
+                                                    onClick={() => destroy(route('milestones.destroy', milestone))}
+                                                >
+                                                    <TrashIcon />
+                                                </Button>
+                                            </div>
+                                            <p className={'mb-2'}>{milestone.description}</p>
+                                            <p>{milestone.due_date as string}</p>
+                                            <Badge className={'capitalize'} variant={'secondary'}>{milestone.status}</Badge>
+                                        </div>
+                                    ))}
+                            </div>
+                        </section>
+                        <Separator />
                         <section>
                             <h1 className={'mb-5 text-2xl font-bold'}>Applications</h1>
                             <Table className={'rounded border'}>
@@ -132,16 +174,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                             </Table>
                         </section>
 
-                        <section>
-                            {jobPosting.application && jobPosting.application?.length > 0 && (
-                                <Link href={route('milestones.create', jobPosting.application)}>
-                                    <Button>Create Milestone</Button>
-                                </Link>
-                            )}
-                        </section>
-
-                        <section>
-                        </section>
+                        <section></section>
                     </div>
                 </div>
             </div>

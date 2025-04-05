@@ -105,7 +105,7 @@ export default function FreelancerProfileDialog({ freelancer }: { freelancer: IF
                                 placeholder="Frontend Developer"
                                 value={data.headline}
                                 required
-                                className={'text-black'}
+                                className={'text-black dark:text-white'}
                                 onChange={(e) => setData('headline', e.target.value)}
                             />
                             {errors.headline && <p className="text-red-500">{errors.headline}</p>}
@@ -120,7 +120,7 @@ export default function FreelancerProfileDialog({ freelancer }: { freelancer: IF
                                 value={data.about}
                                 rows={5}
                                 required
-                                className={'text-black'}
+                                className={'text-black dark:text-white'}
                                 onChange={(e) => setData('about', e.target.value)}
                             />
                             {errors.about && <p className="text-red-500">{errors.about}</p>}

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Freelancer\Category;
 use App\Models\JobPosting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -42,7 +43,7 @@ class JobPostingController extends Controller
     /**
      * Store a newly created job posting.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $client = Client::where('user_id', $user->id)->first();
@@ -74,7 +75,7 @@ class JobPostingController extends Controller
     public function show(JobPosting $jobPosting): Response
     {
         // Load the related category and client relationships
-        $jobPosting->load('category', 'client','application.freelancer.user', 'application.milestones');
+        $jobPosting->load('category', 'client','application.freelancer.user', 'milestones');
 
         // Return the view with the job posting data
         return Inertia::render('JobPosting/Show', [

@@ -82,7 +82,7 @@ export default function Show({ application }: { application: JobApplication }) {
                     </Card>
                 </div>
 
-                <div className="mx-auto mt-5 max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto mt-5 max-w-7xl px-4 sm:px-6 lg:px-8 mb-2">
                     <Card className={'flex max-w-3/4 flex-wrap'}>
                         <CardHeader>
                             <CardTitle>Cover Letter</CardTitle>

@@ -52,7 +52,7 @@ class JobPosting extends Model
         return $this->HasMany(JobApplication::class);
     }
 
-    public function milestone(): HasMany{
+    public function milestones(): HasMany{
         return $this->HasMany(Milestone::class);
     }
 }

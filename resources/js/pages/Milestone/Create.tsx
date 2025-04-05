@@ -32,7 +32,6 @@ export default function Create() {
         post(route('milestones.store', { jobPosting: data.job_posting_id }), {
             onSuccess: () => {
                 toast('Milestone Added!');
-                window.history.back();
             },
         });
     };

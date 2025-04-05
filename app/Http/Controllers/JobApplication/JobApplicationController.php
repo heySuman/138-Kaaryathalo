@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\JobApplication;
 
 use App\Http\Controllers\Controller;
-use App\Models\Client;
-use App\Models\Freelancer\Freelancer;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;

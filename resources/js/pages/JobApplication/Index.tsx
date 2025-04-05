@@ -53,7 +53,7 @@ export default function Index({ applications }: { applications: PaginatedRespons
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`rounded px-2 py-1 text-xs font-semibold ${
+                                                className={`capitalize rounded px-2 py-1 text-xs font-semibold ${
                                                     application.status === 'accepted'
                                                         ? 'bg-green-100 text-green-600'
                                                         : application.status === 'pending'

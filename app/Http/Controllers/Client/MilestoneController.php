@@ -36,11 +36,11 @@ class MilestoneController extends Controller
 
     public function edit(Milestone $milestone): Response
     {
-        $this->authorizeAccess($milestone->jobPosting);
         return Inertia::render('Milestone/Edit', [
             'milestone' => $milestone,
         ]);
     }
+
 
     public function store(Request $request): RedirectResponse
     {
@@ -49,36 +49,40 @@ class MilestoneController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:pending,in_progress,completed,cancelled',
+            'status' => 'required|in:pending,in progress,completed,cancelled',
         ]);
 
         $jobPosting = JobPosting::findOrFail($validated['job_posting_id']);
         $this->authorizeAccess($jobPosting);
 
         Milestone::create($validated);
-        return redirect()->route('job.show', $jobPosting->id)->with('success', 'Milestone created successfully.');
+        return redirect()->route('client.job-posting.show', $jobPosting->id)->with('success', 'Milestone created successfully.');
     }
 
     public function update(Request $request, Milestone $milestone): RedirectResponse
     {
-        $this->authorizeAccess($milestone->jobPosting);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'required|numeric|min:0',
             'due_date' => 'nullable|date',
             'status' => 'required|in:pending,in_progress,completed,cancelled',
         ]);
 
+        $jobPosting = JobPosting::findOrFail($milestone->job_posting_id);
+
+        $this->authorizeAccess($jobPosting);
         $milestone->update($validated);
-        return redirect()->route('job.show', $milestone->jobPosting->id)->with('success', 'Milestone updated successfully.');
+
+        return redirect()->route('client.job-posting.show', $milestone->job_posting_id)->with('success', 'Milestone updated successfully.');
     }
+
 
     public function destroy(Milestone $milestone): RedirectResponse
     {
-        $this->authorizeAccess($milestone->jobPosting);
+        $jobPosting = JobPosting::findOrFail($milestone->job_posting_id);
+        $this->authorizeAccess($jobPosting);
         $milestone->delete();
-        return redirect()->route('job.show', $milestone->jobPosting->id)->with('success', 'Milestone deleted successfully.');
+        return redirect()->route('client.job-posting.show', $milestone->job_posting_id)->with('success', 'Milestone updated successfully.');
     }
 
     private function authorizeAccess(JobPosting $jobPosting): void
