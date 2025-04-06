@@ -21,5 +21,5 @@ export type Milestone = {
     title: string;
     description: string;
     due_date: string | Date | null;
-    status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+    status: 'pending' | 'in progress' | 'completed' | 'cancelled';
 };

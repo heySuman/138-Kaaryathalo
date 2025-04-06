@@ -18,6 +18,11 @@ export const freelancerNavItems: NavItem[] = [
         icon: AppWindowMac,
     },
     {
+        title: 'Deliver Work',
+        href: '/milestones',
+        icon: AppWindowMac,
+    },
+    {
         title: 'Profile',
         href: '/freelancer/profile',
         icon: User,

@@ -10,12 +10,14 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('job-application/{jobPosting}/milestones', [MilestoneController::class, 'index'])->name('milestones.index');
+    Route::get('milestones', [MilestoneController::class, 'index'])->name('milestones.index');
     Route::get('job-application/{jobPosting}/milestones/create', [MilestoneController::class, 'create'])->name('milestones.create');
     Route::post('job-application/{jobPosting}/milestones', [MilestoneController::class, 'store'])->name('milestones.store');
     Route::get('milestone/{milestone}/edit', [MilestoneController::class, 'edit'])->name('milestones.edit');
     Route::put('milestone/{milestone}', [MilestoneController::class, 'update'])->name('milestones.update');
+    Route::patch('milestone/{milestone}', [MilestoneController::class, 'updateMilestone'])->name('milestones.update.status');
     Route::delete('milestone/{milestone}', [MilestoneController::class, 'destroy'])->name('milestones.destroy');
+
 });
 
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Freelancer\Freelancer;
+use App\Models\JobApplication;
 use App\Models\JobPosting;
 use App\Models\Milestone;
 use Illuminate\Http\RedirectResponse;
@@ -13,16 +15,36 @@ use Inertia\Response;
 
 class MilestoneController extends Controller
 {
-    public function index($jobPostingId): Response
+    public function index(): Response
     {
-        $jobPosting = JobPosting::findOrFail($jobPostingId);
-        $this->authorizeAccess($jobPosting);
+        $user = Auth::user();
+        $freelancer = Freelancer::where('user_id', $user->id)->first();
 
-        $milestones = Milestone::where('job_posting_id', $jobPosting->id)->get();
+        $applications = JobApplication::with('job.milestones')
+            ->where('freelancer_id', $freelancer->id)
+            ->where('status', 'accepted')
+            ->get();
+
+        $jobs = [];
+
+        foreach ($applications as $application) {
+            $job = $application->job;
+
+            if ($job) {
+                $jobs[] = [
+                    'id' => $job->id,
+                    'title' => $job->title,
+                    'description' => $job->description,
+                    'milestones' => $job->milestones,
+                ];
+            }
+        }
+
         return Inertia::render('Milestone/Index', [
-            'milestones' => $milestones,
+            'jobs' => $jobs,
         ]);
     }
+
 
     public function create($jobPostingId): Response
     {
@@ -91,5 +113,15 @@ class MilestoneController extends Controller
         if ($user->id !== $jobPosting->client->user_id) {
             abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function updateMilestone(Request $request, Milestone $milestone): RedirectResponse
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in progress,completed,cancelled',
+        ]);
+
+        $milestone->update($validated);
+        return back()->with('success', 'Milestone updated successfully.');
     }
 }
