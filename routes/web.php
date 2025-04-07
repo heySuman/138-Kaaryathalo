@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Client\MilestoneController;
 use App\Http\Controllers\PaymentController;
+use App\Models\Client;
+use App\Models\RequestPayment;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,7 +28,12 @@ Route::post('/api/khalti/pay', [PaymentController::class, 'khaltiPay']);
 Route::post('/api/khalti/verify', [PaymentController::class, 'khaltiVerify']);
 
 Route::get('/payment', function () {
-    return Inertia::render('Payment');
+    $user = Auth::user();
+    $client = Client::where('user_id', $user->id)->first();
+    $paymentRequest = RequestPayment::where('client_id', $client->id)->with(['freelancer', 'job'])->latest()->get();
+    return Inertia::render('Payment', [
+        'paymentRequests' => $paymentRequest
+    ]);
 });
 
 

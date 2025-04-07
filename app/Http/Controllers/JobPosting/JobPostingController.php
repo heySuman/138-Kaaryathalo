@@ -122,6 +122,7 @@ class JobPostingController extends Controller
             'skills' => 'sometimes|array',
             'experience_level' => 'sometimes|in:fresher,intermediate,expert',
             'category_id' => 'sometimes|exists:categories,id',
+            'status' => 'sometimes|in:pending,in progress,completed',
         ]);
 
         $jobPosting->update($validated);

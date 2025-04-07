@@ -6,8 +6,9 @@ import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Award, Calendar, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
+import {ArrowLeft, Award, BookMarked, Calendar, Pencil, Plus, Tag, TicketIcon, TrashIcon} from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
+import { toast } from 'sonner';
 
 export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     console.log(jobPosting);
@@ -18,6 +19,13 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
     } = useForm({
         status: 'accepted',
     });
+
+    const handleComplete = () => {
+        data.status = 'completed';
+        patch(route('client.job-posting.update', jobPosting), {
+            onSuccess: () => toast('Job marked as completed'),
+        });
+    };
 
     return (
         <AppLayout>
@@ -33,7 +41,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                 </div>
             </div>
 
-            <div className="pt-6">
+            <div className="">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-4">
                     <div className="my-4 space-y-8 border-r lg:w-3/4">
                         <div className="space-y-4">
@@ -46,6 +54,12 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                             Edit
                                         </Button>
                                     </Link>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" size="sm" onClick={handleComplete}>
+                                        <BookMarked className={'mr-1 h-4 w-4'} />
+                                        Mark as Complete
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +144,9 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                             </div>
                                             <p className={'mb-2'}>{milestone.description}</p>
                                             <p>{milestone.due_date as string}</p>
-                                            <Badge className={'capitalize'} variant={'secondary'}>{milestone.status}</Badge>
+                                            <Badge className={'capitalize'} variant={'secondary'}>
+                                                {milestone.status}
+                                            </Badge>
                                         </div>
                                     ))}
                             </div>
