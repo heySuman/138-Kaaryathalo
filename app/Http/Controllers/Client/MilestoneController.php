@@ -35,13 +35,17 @@ class MilestoneController extends Controller
                     'id' => $job->id,
                     'title' => $job->title,
                     'description' => $job->description,
+                    'budget' => $job->budget,
+                    'client_id' => $job->client_id,
                     'milestones' => $job->milestones,
+                    'application' => $application,
                 ];
             }
         }
 
         return Inertia::render('Milestone/Index', [
             'jobs' => $jobs,
+            'freelancer' => $freelancer,
         ]);
     }
 

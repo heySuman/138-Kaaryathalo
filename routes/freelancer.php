@@ -7,6 +7,7 @@ use App\Http\Controllers\Freelancer\ExperienceController;
 use App\Http\Controllers\Freelancer\ProjectController;
 use App\Http\Controllers\JobApplication\JobApplicationController;
 use App\Http\Controllers\JobSearch\JobSearchController;
+use App\Http\Controllers\RequestPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
@@ -36,4 +37,7 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::post('job-applications', [JobApplicationController::class, 'store'])->name('job-applications.store');
     Route::get('job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
     Route::delete('job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
+
+    Route::post('request-payment', [RequestPaymentController::class, 'store'])->name('request-payment.store');
+    Route::patch('request-payment/{payment}/update', [RequestPaymentController::class, 'updateStatus'])->name('request-payment.update');
 });
