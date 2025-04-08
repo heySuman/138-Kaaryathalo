@@ -6,7 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
-import {ArrowLeft, Award, BookMarked, Calendar, Pencil, Plus, Tag, TicketIcon, TrashIcon} from 'lucide-react';
+import { ArrowLeft, Award, Calendar, CircleCheck, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 import { toast } from 'sonner';
 
@@ -57,7 +57,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                 </div>
                                 <div className="flex gap-2">
                                     <Button variant="outline" size="sm" onClick={handleComplete}>
-                                        <BookMarked className={'mr-1 h-4 w-4'} />
+                                        <CircleCheck className={'mr-1 h-4 w-4'} />
                                         Mark as Complete
                                     </Button>
                                 </div>
@@ -98,7 +98,6 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         </div>
 
                         <Separator />
-
                         <div className="space-y-4">
                             <h2 className="text-2xl font-semibold">Skills and Expertise</h2>
                             <div className="list-none space-y-2">

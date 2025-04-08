@@ -2,56 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RequestPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 class PaymentController extends Controller
 {
-    public function esewaPay(Request $request)
+    public function handlePayment(Request $request)
     {
-        $amount = $request->amount;
-        $transactionId = 'TXN' . time();
+        $validated = $request->validate([
+            'paymentRequest.id' => 'required|integer|exists:request_payments,id',
+        ]);
 
-        $data = [
-            'amt' => $amount,
-            'pdc' => 0,
-            'psc' => 0,
-            'txAmt' => 0,
-            'tAmt' => $amount,
-            'pid' => $transactionId,
-            'scd' => 'EPAYTEST',
-            'su' => url('/payment/success?pid=' . $transactionId),
-            'fu' => url('/payment/failure')
+        $paymentRequest = RequestPayment::with(['job', 'freelancer','freelancer.user'])
+            ->findOrFail($request->input('paymentRequest.id'));
+
+        $secretKey = '4c057d8ac62f4a3685785ac6edd41a40';
+
+        $payload = [
+            "return_url" => "http://localhost:8000/payment",
+            "website_url" => "http://localhost:8000",
+            "amount" => $paymentRequest->amount * 100,
+            "purchase_order_id" => $paymentRequest->id,
+            "purchase_order_name" => $paymentRequest->job->title,
+            "customer_info" => [
+                "name" => $paymentRequest->freelancer->user->name,
+                "email" => $paymentRequest->freelancer->user->email,
+                "phone" => "9800000001",
+            ]
         ];
 
-        return Inertia::location('https://rc-epay.esewa.com.np/api/epay/main/v2/form?' . http_build_query($data));
-    }
-
-    public function khaltiPay(Request $request)
-    {
         $response = Http::withHeaders([
-            'Authorization' => 'Key Your_Khalti_Secret_Key'
-        ])->post('https://dev.khalti.com/api/v2/epayment/initiate/', [
-            'return_url' => url('/payment/success'),
-            'website_url' => url('/'),
-            'amount' => $request->amount * 100, // Khalti uses paisa
-            'purchase_order_id' => uniqid(),
-            'purchase_order_name' => 'Freelancer Payment'
-        ]);
+            'Authorization' => 'Key ' . $secretKey,
+            'Content-Type' => 'application/json'
+        ])->post('https://a.khalti.com/api/v2/epayment/initiate/', $payload);
 
-        return Inertia::location($response->json()['payment_url']);
+        if ($response->successful()) {
+            $data = $response->json();
+            return Inertia::location($data['payment_url']);
+        }
+
+        if (!$response->successful()) {
+            logger()->error('Khalti payment failed', [
+                'response' => $response->body(),
+            ]);
+
+            return back()->withErrors([
+                'payment' => 'Failed to initiate payment. Please try again.',
+            ]);
+        }
     }
 
-    public function khaltiVerify(Request $request)
-    {
-        $response = Http::withHeaders([
-            'Authorization' => 'Key Your_Khalti_Secret_Key'
-        ])->post('https://dev.khalti.com/api/v2/payment/verify/', [
-            'token' => $request->token,
-            'amount' => $request->amount * 100
-        ]);
-
-        return response()->json($response->json());
-    }
 }

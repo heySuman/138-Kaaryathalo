@@ -20,12 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('milestone/{milestone}', [MilestoneController::class, 'updateMilestone'])->name('milestones.update.status');
     Route::delete('milestone/{milestone}', [MilestoneController::class, 'destroy'])->name('milestones.destroy');
 
+    Route::post('/khalti', [PaymentController::class, 'handlePayment'])->name('khalti.handle');
 });
-
-
-Route::post('/api/esewa/pay', [PaymentController::class, 'esewaPay']);
-Route::post('/api/khalti/pay', [PaymentController::class, 'khaltiPay']);
-Route::post('/api/khalti/verify', [PaymentController::class, 'khaltiVerify']);
 
 Route::get('/payment', function () {
     $user = Auth::user();
