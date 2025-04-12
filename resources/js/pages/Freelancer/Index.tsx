@@ -11,18 +11,19 @@ import { Head, usePage } from '@inertiajs/react';
 
 export default function Index() {
     const { freelancer } = usePage<SharedData<{ freelancer: IFreelancer }>>().props;
+    console.log(freelancer)
     return (
         <AppLayout>
             <Head title="Profile" />
             {!freelancer && <ProfileRequiredCard variant={"freelancer"}/>}
             {freelancer && (
-                <>
+                <section>
                     <ProfileCard freelancer={freelancer} />
                     <ProfileAbout freelancer={freelancer} />
                     <CertificateCard freelancer={freelancer} />
                     <ExperienceCard freelancer={freelancer} />
                     <ProjectCard freelancer={freelancer} />
-                </>
+                </section>
             )}
         </AppLayout>
     );

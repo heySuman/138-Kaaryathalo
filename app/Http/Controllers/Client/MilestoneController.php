@@ -7,6 +7,7 @@ use App\Models\Freelancer\Freelancer;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
 use App\Models\Milestone;
+use App\Models\RequestPayment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,6 @@ class MilestoneController extends Controller
     {
         $user = Auth::user();
         $freelancer = Freelancer::where('user_id', $user->id)->first();
-
         $applications = JobApplication::with('job.milestones')
             ->where('freelancer_id', $freelancer->id)
             ->where('status', 'accepted')
@@ -39,6 +39,7 @@ class MilestoneController extends Controller
                     'client_id' => $job->client_id,
                     'milestones' => $job->milestones,
                     'application' => $application,
+                    'payment_request' => RequestPayment::where('job_id', $job->id)->first() ?? null
                 ];
             }
         }

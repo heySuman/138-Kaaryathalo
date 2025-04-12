@@ -59,7 +59,7 @@ export default function Index({ jobs, freelancer, category }: JobIndexPageProps)
                 <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-5 flex items-center justify-between">
                         <div>
-                            <h2 className="text-2xl font-black">Search Jobs</h2>
+                            <h2 className="text-3xl font-black">Search Jobs</h2>
                         </div>
                     </div>
 

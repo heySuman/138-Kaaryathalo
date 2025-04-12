@@ -2,6 +2,7 @@ import { IClient } from '@/types/client';
 import { ICategory, IFreelancer } from '@/types/freelancer';
 import { SharedData } from '@/types/index';
 import { JobApplication, Milestone } from '@/types/job-application';
+import {PaymentRequest} from "@/types/payment";
 
 export type JobPosting = {
     id: number;
@@ -18,23 +19,18 @@ export type JobPosting = {
     attachments?: string[] | null;
     client_id: number;
     category_id: number;
+
     category?: ICategory;
     client?: IClient;
+
     application?: JobApplication[];
     milestones: Milestone[];
+
+    payment_request : PaymentRequest
+
     created_at?: string | Date;
     updated_at?: string | Date;
 };
-
-export interface JobPostingFormErrors {
-    title?: string;
-    description?: string;
-    expiry_date?: string;
-    duration?: string;
-    budget?: string;
-    skills?: string;
-    experience_level?: string;
-}
 
 export interface PaginatedResponse<T> {
     current_page: number;

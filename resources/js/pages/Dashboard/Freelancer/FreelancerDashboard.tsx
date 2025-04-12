@@ -22,7 +22,7 @@ export default function FreelancerDashboard() {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="mb-5 flex items-center justify-between">
                             <div>
-                                <h2 className="text-2xl font-black">Dashboard</h2>
+                                <h2 className="text-3xl font-black">Dashboard</h2>
                             </div>
                         </div>
 

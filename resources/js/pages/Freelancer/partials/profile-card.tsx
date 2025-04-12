@@ -12,11 +12,12 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
     const getInitials = useInitials();
 
     return (
-        <Card className="mx-auto my-2 w-[90%] overflow-hidden shadow-sm sm:rounded-xl">
-            <div className="flex flex-col items-center px-6 sm:items-start">
+        <>
+        <Card className="mx-auto my-2 w-[90%] overflow-hidden">
+            <div className="flex items-center px-6 sm:items-start gap-2 flex-wrap">
                 {/* Profile Picture */}
                 <div className="rounded-full border-4 border-white bg-white">
-                    <div className="relative h-[150px] w-[150px] overflow-hidden rounded-full">
+                    <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border">
                         <Avatar className="h-full w-full object-cover">
                             <AvatarImage src={freelancer?.profile_picture as string} alt={auth.user.name} />
                             <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
@@ -35,5 +36,6 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
                 </div>
             </div>
         </Card>
+        </>
     );
 }
