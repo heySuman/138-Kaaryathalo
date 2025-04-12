@@ -35,8 +35,8 @@ export default function AlertDeleteExperience({ experience }: { experience: IExp
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className={'text-red-500'}>
-                    <Trash className="h-4 w-4" />
+                <Button variant="ghost" className={'text-red-500'} size="sm">
+                    <Trash className="h-4 w-4 border" />
                     <span className="sr-only">Delete Experience</span>
                 </Button>
             </DialogTrigger>

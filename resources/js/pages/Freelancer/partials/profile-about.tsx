@@ -4,7 +4,7 @@ import FreelancerProfileDialog from "@/pages/Freelancer/partials/popup-dialog/al
 
 export function ProfileAbout({ freelancer }: { freelancer: IFreelancer }) {
     return (
-        <Card className="shadow-sm w-[90%] mx-auto mt-2">
+        <Card className="w-[90%] mx-auto">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-2xl">About</CardTitle>
                 <FreelancerProfileDialog freelancer={freelancer}/>

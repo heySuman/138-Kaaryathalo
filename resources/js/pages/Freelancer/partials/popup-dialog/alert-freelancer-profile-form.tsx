@@ -75,7 +75,7 @@ export default function FreelancerProfileDialog({ freelancer }: { freelancer: IF
     return (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
             <AlertDialogTrigger asChild>
-                <Button variant={freelancer ? 'ghost' : 'default'}>{freelancer ? <Pencil /> : <p>Create Profile</p>}</Button>
+                <Button variant={freelancer ? 'ghost' : 'default'} className={'border'} size={'sm'}>{freelancer ? <Pencil /> : <p>Create Profile</p>}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
                 <AlertDialogHeader>

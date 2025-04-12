@@ -35,7 +35,7 @@ export default function AlertDeleteProject({ project }: { project: IProject }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" className={'text-red-500'}>
+                <Button variant="ghost" className={'text-red-500 border'} size="sm">
                     <Trash className="h-4 w-4" />
                     <span className="sr-only">Delete Project</span>
                 </Button>

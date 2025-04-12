@@ -51,7 +51,7 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
     return (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
             <AlertDialogTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8">
+                <Button variant="ghost" className="h-8 w-8 border">
                     {experience ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                     <span className="sr-only">Add Experience</span>
                 </Button>

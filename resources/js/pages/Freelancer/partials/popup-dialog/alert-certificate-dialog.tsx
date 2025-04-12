@@ -54,7 +54,7 @@ export default function AlertCertificateForm({ certificate }: { certificate: ICe
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8" onClick={() => setIsOpen(true)}>
+                <Button variant="ghost" className="h-8 w-8 border" onClick={() => setIsOpen(true)}>
                     {certificate ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                     <span className="sr-only">{certificate ? 'Edit Certificate' : 'Add Certificate'}</span>
                 </Button>

@@ -9,7 +9,7 @@ import { ExternalLink } from 'lucide-react';
 
 export function ProjectCard({ freelancer }: { freelancer: IFreelancer }) {
     return (
-        <Card className="mx-auto my-2 w-[90%] overflow-hidden shadow-sm sm:rounded-xl">
+        <Card className="mx-auto w-[90%] overflow-hidden shadow-none border-0">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-2xl">Projects</CardTitle>
                 <div className="flex gap-2">

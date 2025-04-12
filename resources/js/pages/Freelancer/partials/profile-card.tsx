@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
 import { useInitials } from '@/hooks/use-initials';
 import AlertDeleteFreelancer from '@/pages/Freelancer/partials/popup-dialog/alert-delete-freelancer';
 import FreelancerProfileDialog from '@/pages/Freelancer/partials/popup-dialog/alert-freelancer-profile-form';
@@ -13,7 +12,7 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
 
     return (
         <>
-        <Card className="mx-auto my-2 w-[90%] overflow-hidden">
+        <div className="mx-auto w-[90%] overflow-hidden mt-5">
             <div className="flex items-center px-6 sm:items-start gap-2 flex-wrap">
                 {/* Profile Picture */}
                 <div className="rounded-full border-4 border-white bg-white">
@@ -26,16 +25,17 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
                 </div>
 
                 {/* Profile Info */}
-                <div className="mt-2 space-y-2 border-red-500">
-                    <div className="flex items-center justify-between">
+                <div className="">
+                    <div className="flex items-center justify-between gap-2">
                         <h1 className="text-2xl font-bold">{auth.user.name}</h1>
                         <FreelancerProfileDialog freelancer={freelancer} />
                         <AlertDeleteFreelancer />
                     </div>
                     <p className="text-muted-foreground text-lg">{freelancer.headline}</p>
+                    <p className="text-muted-foreground text-lg">{freelancer.about}</p>
                 </div>
             </div>
-        </Card>
+        </div>
         </>
     );
 }
