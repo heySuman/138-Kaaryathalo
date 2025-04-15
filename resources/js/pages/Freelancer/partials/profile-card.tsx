@@ -12,30 +12,30 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
 
     return (
         <>
-        <div className="mx-auto w-[90%] overflow-hidden mt-5">
-            <div className="flex items-center px-6 sm:items-start gap-2 flex-wrap">
-                {/* Profile Picture */}
-                <div className="rounded-full border-4 border-white bg-white">
-                    <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border">
-                        <Avatar className="h-full w-full object-cover">
-                            <AvatarImage src={freelancer?.profile_picture as string} alt={auth.user.name} />
-                            <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
-                        </Avatar>
+            <div className="mx-auto mt-5 w-[90%] overflow-hidden">
+                <div className="flex flex-wrap items-center gap-2 px-6 sm:items-start">
+                    {/* Profile Picture */}
+                    <div className="rounded-full border-4 border-white bg-white">
+                        <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border">
+                            <Avatar className="h-full w-full object-cover shadow-lg">
+                                <AvatarImage src={freelancer?.profile_picture as string} alt={auth.user.name} />
+                                <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
+                            </Avatar>
+                        </div>
                     </div>
-                </div>
 
-                {/* Profile Info */}
-                <div className="">
-                    <div className="flex items-center justify-between gap-2">
-                        <h1 className="text-2xl font-bold">{auth.user.name}</h1>
-                        <FreelancerProfileDialog freelancer={freelancer} />
-                        <AlertDeleteFreelancer />
+                    {/* Profile Info */}
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold">{auth.user.name}</h1>
+                            <FreelancerProfileDialog freelancer={freelancer} />
+                            <AlertDeleteFreelancer />
+                        </div>
+                        <p className="text-md mb-2">{freelancer.headline}</p>
+                        <p className="text-muted-foreground max-w-4xl">{freelancer.about}</p>
                     </div>
-                    <p className="text-muted-foreground text-lg">{freelancer.headline}</p>
-                    <p className="text-muted-foreground text-lg">{freelancer.about}</p>
                 </div>
             </div>
-        </div>
         </>
     );
 }

@@ -8,7 +8,7 @@ export function ExperienceCard({ freelancer }: { freelancer: IFreelancer }) {
     return (
         <Card className="mx-auto w-[90%] overflow-hidden shadow-none border-0">
             <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-2xl">Experience</CardTitle>
+                <CardTitle className="text-2xl">Experiences</CardTitle>
                 <div className="flex gap-2">
                     <AlertExperienceForm experience={null} />
                 </div>

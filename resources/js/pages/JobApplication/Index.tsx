@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AppLayout from '@/layouts/app-layout';
 import { JobApplication } from '@/types/job-application';
 import { PaginatedResponse } from '@/types/job-postings';
-import { Head, Link, router } from '@inertiajs/react'; // Added missing router import
+import { Head, Link, router } from '@inertiajs/react';
 
 export default function Index({ applications }: { applications: PaginatedResponse<JobApplication> }) {
     const { current_page, last_page } = applications;
@@ -22,7 +22,7 @@ export default function Index({ applications }: { applications: PaginatedRespons
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-5 flex items-center justify-between">
                         <div>
-                            <h2 className="text-3xl font-black mb-2">Applications</h2>
+                            <h2 className="mb-2 text-3xl font-black">Applications</h2>
                             <p className={'text-gray-500'}>Find your application status</p>
                         </div>
                     </div>
@@ -54,7 +54,7 @@ export default function Index({ applications }: { applications: PaginatedRespons
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`capitalize rounded px-2 py-1 text-xs font-semibold ${
+                                                className={`rounded px-2 py-1 text-xs font-semibold capitalize ${
                                                     application.status === 'accepted'
                                                         ? 'bg-green-100 text-green-600'
                                                         : application.status === 'pending'

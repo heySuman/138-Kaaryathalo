@@ -20,6 +20,14 @@ class MilestoneController extends Controller
     {
         $user = Auth::user();
         $freelancer = Freelancer::where('user_id', $user->id)->first();
+
+        if (!$freelancer) {
+            return Inertia::render('Milestone/Index', [
+                'jobs' => null,
+                'freelancer' => null,
+            ]);
+        }
+
         $applications = JobApplication::with('job.milestones')
             ->where('freelancer_id', $freelancer->id)
             ->where('status', 'accepted')
@@ -49,7 +57,6 @@ class MilestoneController extends Controller
             'freelancer' => $freelancer,
         ]);
     }
-
 
     public function create($jobPostingId): Response
     {

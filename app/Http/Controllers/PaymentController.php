@@ -29,7 +29,7 @@ class PaymentController extends Controller
             "customer_info" => [
                 "name" => $paymentRequest->freelancer->user->name,
                 "email" => $paymentRequest->freelancer->user->email,
-                "phone" => "9800000001",
+                "phone" =>'9800000000',
             ]
         ];
 
@@ -49,7 +49,7 @@ class PaymentController extends Controller
             ]);
 
             return back()->withErrors([
-                'payment' => 'Failed to initiate payment. Please try again.',
+                'payment' => 'Failed to initiate payment. Please try again.'
             ]);
         }
     }

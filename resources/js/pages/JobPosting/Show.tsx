@@ -5,7 +5,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { formatDistanceToNow } from 'date-fns';
+import {format, formatDistanceToNow} from 'date-fns';
 import { ArrowLeft, Award, Calendar, CircleCheck, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 import { toast } from 'sonner';
@@ -100,7 +100,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         <Separator />
                         <div className="space-y-4">
                             <h2 className="text-2xl font-semibold">Skills and Expertise</h2>
-                            <div className="list-none space-y-2">
+                            <div className="list-none flex gap-2">
                                 {jobPosting.skills.map((item, index) => (
                                     <Badge key={index} variant="secondary">
                                         <span>{item}</span>
@@ -126,8 +126,8 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                 {jobPosting.milestones &&
                                     jobPosting.milestones.map((milestone) => (
                                         <div key={milestone.id} className={'my-3 border-b p-2'}>
-                                            <div className={'flex items-center gap-2'}>
-                                                <h2 className={'mb-2 text-xl font-bold capitalize'}>{milestone.title}</h2>
+                                            <div className={'flex items-center gap-2 mb-3'}>
+                                                <h2 className={'text-xl font-bold capitalize'}>{milestone.title}</h2>
                                                 <Link href={route('milestones.edit', milestone)}>
                                                     <Button variant={'outline'} size={'sm'}>
                                                         <Pencil />
@@ -141,11 +141,12 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                                     <TrashIcon />
                                                 </Button>
                                             </div>
-                                            <p className={'mb-2'}>{milestone.description}</p>
-                                            <p>{milestone.due_date as string}</p>
-                                            <Badge className={'capitalize'} variant={'secondary'}>
-                                                {milestone.status}
-                                            </Badge>
+                                            <p className={'mb- text-muted-foreground'}>{milestone.description}</p>
+                                            <p className={'my-3'}>Due Date: {format(milestone.due_date as string,'MMMM' +
+                                                ' dd, yyyy' )}</p>
+                                            <p className={'capitalize'}>
+                                                Status: {milestone.status}
+                                            </p>
                                         </div>
                                     ))}
                             </div>

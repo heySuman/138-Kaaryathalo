@@ -8,6 +8,7 @@ import { IFreelancer } from '@/types/freelancer';
 import { JobPosting } from '@/types/job-postings';
 import { Head, router } from '@inertiajs/react';
 import { toast, Toaster } from 'sonner';
+import ProfileRequiredCard from "@/pages/Freelancer/partials/popup-dialog/alert-create-profile";
 
 export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freelancer: IFreelancer }) {
     console.log(jobs);
@@ -43,6 +44,7 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
     return (
         <AppLayout>
             <Head title={'Milestones'} />
+            {!freelancer && <ProfileRequiredCard variant={'freelancer'} />}
             <div className="min-h-screen">
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="mb-6 flex items-center justify-between">

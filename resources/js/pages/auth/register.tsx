@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import {LoaderCircle} from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
@@ -7,27 +7,21 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AuthLayout from '@/layouts/auth-layout';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 
 type RegisterForm = {
     name: string;
     email: string;
     password: string;
+    phone: string;
     password_confirmation: string;
-    role:ROLE
+    role: ROLE;
 };
 
-enum ROLE{
-    CLIENT = "client",
-    FREELANCER = "freelancer"
+enum ROLE {
+    CLIENT = 'client',
+    FREELANCER = 'freelancer',
 }
 
 export default function Register() {
@@ -35,8 +29,9 @@ export default function Register() {
         name: '',
         email: '',
         password: '',
+        phone: '',
         password_confirmation: '',
-        role: ROLE.FREELANCER
+        role: ROLE.FREELANCER,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -80,6 +75,21 @@ export default function Register() {
                             onChange={(e) => setData('email', e.target.value)}
                             disabled={processing}
                             placeholder="email@example.com"
+                        />
+                        <InputError message={errors.email} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="phone">Phone</Label>
+                        <Input
+                            id="phone"
+                            type="text"
+                            required
+                            tabIndex={2}
+                            autoComplete="phone"
+                            value={data.phone}
+                            onChange={(e) => setData('phone', e.target.value)}
+                            disabled={processing}
+                            placeholder="9800000000"
                         />
                         <InputError message={errors.email} />
                     </div>
@@ -130,12 +140,8 @@ export default function Register() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value={ROLE.FREELANCER}>
-                                        Freelancer
-                                    </SelectItem>
-                                    <SelectItem value={ROLE.CLIENT}>
-                                        Client
-                                    </SelectItem>
+                                    <SelectItem value={ROLE.FREELANCER}>Freelancer</SelectItem>
+                                    <SelectItem value={ROLE.CLIENT}>Client</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

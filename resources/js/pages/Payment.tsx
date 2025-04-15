@@ -51,7 +51,7 @@ export default function Payment({ paymentRequests }: { paymentRequests: PaymentR
                                         <TableCell className="font-medium">{format(paymentRequest.created_at, 'MMMM dd, yyyy')}</TableCell>
                                         <TableCell className="font-medium">{paymentRequest.job.title}</TableCell>
                                         <TableCell>
-                                            <Badge>{paymentRequest.status}</Badge>
+                                            <Badge className={'capitalize'}>{paymentRequest.status}</Badge>
                                         </TableCell>
                                         <TableCell>{paymentRequest.amount}</TableCell>
                                         <TableCell className="flex gap-2">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Client\MilestoneController;
 use App\Http\Controllers\PaymentController;
+use \App\Http\Controllers\MessageController;
 use App\Models\Client;
 use App\Models\RequestPayment;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,11 @@ Route::get('/payment', function () {
     ]);
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/messages', [MessageController::class, 'sendMessage']);
+    Route::get('/messages/{receiverId}', [MessageController::class, 'getMessages']);
+    Route::patch('/messages/{messageId}/read', [MessageController::class, 'markAsRead']);
+});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/freelancer.php';

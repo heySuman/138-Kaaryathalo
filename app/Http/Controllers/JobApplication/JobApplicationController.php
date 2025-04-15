@@ -22,7 +22,6 @@ class JobApplicationController extends Controller
         $user = Auth::user();
 
         if ($user->role === "freelancer") {
-            // Show applications submitted by the freelancer
             $applications = JobApplication::with(['job', 'freelancer.user', 'job.category'])
                 ->whereHas('freelancer', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
@@ -31,9 +30,8 @@ class JobApplicationController extends Controller
                 ->paginate(10);
 
         } elseif ($user->role === "client") {
-            // Fetch applications grouped by jobs for the client
             $applications = JobPosting::with(['applications.freelancer.user'])
-                ->where('client_id', $user->client->id) // Use relationship
+                ->where('client_id', $user->client->id)
                 ->latest()
                 ->paginate(10);
         } else {
@@ -41,7 +39,7 @@ class JobApplicationController extends Controller
         }
 
         return Inertia::render('JobApplication/Index', [
-            'applications' => $applications
+            'applications' => $applications,
         ]);
     }
 

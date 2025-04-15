@@ -49,9 +49,4 @@ export const clientNavItems: NavItem[] = [
         href: '/payment',
         icon: CreditCard,
     },
-    {
-        title: 'Profile',
-        href: '/client/profile',
-        icon: User,
-    },
 ];

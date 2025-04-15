@@ -16,7 +16,7 @@ class ClientDashboardController extends Controller
         $user = Auth::user();
 
         // Check if the client exists
-        $client = Client::where('user_id', $user->id)->first();
+        $client = Client::where('user_id', $user->id)->with(['user'])->first();
 
         if (!$client) {
             // Handle the case where the client does not exist
@@ -41,6 +41,7 @@ class ClientDashboardController extends Controller
             ->get();
 
         return Inertia::render('Dashboard/client/ClientDashboard', [
+            "client" => $client,
             "jobStatusCount" => $jobCountStatus,
             "latestJobPostings" => $latest_job_postings
         ]);
