@@ -6,22 +6,35 @@ import AppLayout from '@/layouts/app-layout';
 import { PaymentRequest } from '@/types/payment';
 import { Head, router } from '@inertiajs/react';
 import { format } from 'date-fns';
-import {toast} from "sonner";
+import { useEffect } from 'react';
+import { toast, Toaster } from 'sonner';
 
-export default function Payment({ paymentRequests }: { paymentRequests: PaymentRequest[] }) {
-    console.log(paymentRequests);
+export default function Payment({ paymentRequests, payment, error }: { paymentRequests: PaymentRequest[]; payment?: any; error?: string }) {
+    console.log(paymentRequests, payment, error);
 
     const handlePay = (paymentRequest: PaymentRequest) => {
-        router.post(route('khalti.handle'), {
-            paymentRequest: {
-                id: paymentRequest.id,
+        router.post(
+            route('khalti.handle'),
+            {
+                paymentRequest: {
+                    id: paymentRequest.id,
+                },
             },
-        },{
-            onError: () => {
-                toast("Something went wrong");
-            }
-        });
+            {
+                onError: () => {
+                    toast('Something went wrong');
+                },
+            },
+        );
     };
+
+    useEffect(() => {
+        if (payment) {
+            toast.success('Payment successful!');
+        } else if (error) {
+            toast.error(error);
+        }
+    }, []);
 
     return (
         <AppLayout>
@@ -55,10 +68,10 @@ export default function Payment({ paymentRequests }: { paymentRequests: PaymentR
                                         </TableCell>
                                         <TableCell>{paymentRequest.amount}</TableCell>
                                         <TableCell className="flex gap-2">
-                                            <Button size="sm" variant="outline" onClick={() => handlePay(paymentRequest)}>
+                                            <Button size="sm" variant="outline" onClick={() => handlePay(paymentRequest)} disabled={paymentRequest.status === 'approved' || paymentRequest.status === 'rejected' }>
                                                 Pay now
                                             </Button>
-                                            <Button size="sm" variant="destructive">
+                                            <Button size="sm" variant="destructive" disabled={paymentRequest.status === 'approved' || paymentRequest.status === 'rejected' }>
                                                 Reject
                                             </Button>
                                         </TableCell>
@@ -69,6 +82,7 @@ export default function Payment({ paymentRequests }: { paymentRequests: PaymentR
                     </div>
                 </div>
             </div>
+            <Toaster />
         </AppLayout>
     );
 }
