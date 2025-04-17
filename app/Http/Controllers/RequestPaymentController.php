@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Freelancer\Freelancer;
 use App\Models\RequestPayment;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +12,19 @@ use Inertia\Response;
 
 class RequestPaymentController extends Controller
 {
+    public function index(): Response
+    {
+        $freelancer = Freelancer::where('user_id', Auth::id())->first();
+
+        if ($freelancer == null) {
+            redirect(route('login'));
+        }
+        $paymentRequests = RequestPayment::where('freelancer_id', $freelancer->id)->with(['job'])->latest()->get();
+
+        return Inertia::render('Freelancer/RequestPayment', [
+            'paymentRequests' => $paymentRequests ?? null,
+        ]);
+    }
 
     /**
      * Store a new payment request by a freelancer.

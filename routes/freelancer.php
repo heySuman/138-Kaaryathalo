@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::get('job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
     Route::delete('job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
 
+    Route::get('request-payment', [RequestPaymentController::class, 'index'])->name('request-payment.index');
     Route::post('request-payment', [RequestPaymentController::class, 'store'])->name('request-payment.store');
     Route::patch('request-payment/{payment}/update', [RequestPaymentController::class, 'updateStatus'])->name('request-payment.update');
 });

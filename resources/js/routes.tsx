@@ -1,5 +1,14 @@
 import { NavItem } from '@/types';
-import { AppWindowMac, BriefcaseBusiness, CreditCard, LayoutGrid, MessageSquare, Search, User } from 'lucide-react';
+import {
+    AppWindowMac,
+    BriefcaseBusiness,
+    CreditCard,
+    CurrencyIcon,
+    LayoutGrid,
+    MessageSquare,
+    Search,
+    User
+} from 'lucide-react';
 
 export const freelancerNavItems: NavItem[] = [
     {
@@ -21,6 +30,11 @@ export const freelancerNavItems: NavItem[] = [
         title: 'Deliver Work',
         href: '/milestones',
         icon: AppWindowMac,
+    },
+    {
+        title: 'Payments',
+        href: '/freelancer/request-payment',
+        icon: CurrencyIcon,
     },
     {
         title: 'Profile',

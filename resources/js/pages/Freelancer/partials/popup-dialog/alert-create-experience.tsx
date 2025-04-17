@@ -28,7 +28,6 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
         end_date: experience?.end_date || '',
     });
 
-    // Handle form submission
     const submit = (e: FormEvent) => {
         e.preventDefault();
         if (experience) {
@@ -69,7 +68,6 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
                                     placeholder="Job Title"
                                     value={data.job_title}
                                     required
-                                    className="text-black"
                                     onChange={(e) => setData('job_title', e.target.value)}
                                 />
                                 {errors.job_title && <p className="text-red-500">{errors.job_title}</p>}
@@ -83,7 +81,6 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
                                     placeholder="Company Name"
                                     value={data.company_name}
                                     required
-                                    className="text-black"
                                     onChange={(e) => setData('company_name', e.target.value)}
                                 />
                                 {errors.company_name && <p className="text-red-500">{errors.company_name}</p>}
@@ -97,7 +94,6 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
                                     placeholder="Job Description"
                                     value={data.description}
                                     required
-                                    className="text-black"
                                     onChange={(e) => setData('description', e.target.value)}
                                 />
                                 {errors.description && <p className="text-red-500">{errors.description}</p>}
@@ -111,7 +107,6 @@ export default function AlertExperienceForm({ experience }: { experience: IExper
                                     type="date"
                                     value={data.start_date}
                                     required
-                                    className="text-black"
                                     onChange={(e) => setData('start_date', e.target.value)}
                                 />
                                 {errors.start_date && <p className="text-red-500">{errors.start_date}</p>}

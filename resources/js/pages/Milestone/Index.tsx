@@ -106,15 +106,15 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
 
                                     {/* Request Payment Button */}
                                     {allMilestonesCompleted(job) && (
-                                        <>
-                                            <div className="mt-6 flex items-center gap-2">
+                                        <div className={'mt-6 flex items-center gap-2'}>
+                                            <div className="flex items-center gap-2">
                                                 <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
                                                     Request Payment
                                                 </Button>
                                                 <p>{job.payment_request && 'Requested.'}</p>
                                             </div>
                                             <LeaveReviewDialog job={job} freelancer={freelancer} />
-                                        </>
+                                        </div>
                                     )}
                                 </div>
                             ))}

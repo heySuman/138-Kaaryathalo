@@ -12,7 +12,7 @@ export function ProfileCard({ freelancer }: { freelancer: IFreelancer }) {
 
     return (
         <>
-            <div className="mx-auto mt-5 w-[90%] overflow-hidden">
+            <div className="mx-auto my-5 w-[90%] overflow-hidden">
                 <div className="flex flex-wrap items-center gap-2 px-6 sm:items-start">
                     {/* Profile Picture */}
                     <div className="rounded-full border-4 border-white bg-white">

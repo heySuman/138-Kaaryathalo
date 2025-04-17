@@ -90,6 +90,8 @@ export default function Register() {
                             onChange={(e) => setData('phone', e.target.value)}
                             disabled={processing}
                             placeholder="9800000000"
+                            maxLength={10}
+                            minLength={10}
                         />
                         <InputError message={errors.email} />
                     </div>
