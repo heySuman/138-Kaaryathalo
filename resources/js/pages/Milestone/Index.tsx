@@ -4,11 +4,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
+import ProfileRequiredCard from '@/pages/Freelancer/partials/popup-dialog/alert-create-profile';
+import LeaveReviewDialog from '@/pages/Milestone/partials/alert-dialog-rating-review';
 import { IFreelancer } from '@/types/freelancer';
 import { JobPosting } from '@/types/job-postings';
 import { Head, router } from '@inertiajs/react';
 import { toast, Toaster } from 'sonner';
-import ProfileRequiredCard from "@/pages/Freelancer/partials/popup-dialog/alert-create-profile";
 
 export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freelancer: IFreelancer }) {
     console.log(jobs);
@@ -105,15 +106,15 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
 
                                     {/* Request Payment Button */}
                                     {allMilestonesCompleted(job) && (
-                                        <div className="mt-6 flex items-center gap-2">
-                                            <Button
-                                                size={'sm'}
-                                                disabled={!!job.payment_request}
-                                                onClick={() => handleRequestPayment(job)}>
-                                                Request Payment
-                                            </Button>
-                                            <p>{job.payment_request && "Requested."}</p>
-                                        </div>
+                                        <>
+                                            <div className="mt-6 flex items-center gap-2">
+                                                <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
+                                                    Request Payment
+                                                </Button>
+                                                <p>{job.payment_request && 'Requested.'}</p>
+                                            </div>
+                                            <LeaveReviewDialog job={job} freelancer={freelancer} />
+                                        </>
                                     )}
                                 </div>
                             ))}

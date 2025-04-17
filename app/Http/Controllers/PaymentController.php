@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\RequestPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use App\Models\Client;
 
 class PaymentController extends Controller
 {
@@ -15,7 +19,7 @@ class PaymentController extends Controller
             'paymentRequest.id' => 'required|integer|exists:request_payments,id',
         ]);
 
-        $paymentRequest = RequestPayment::with(['job', 'freelancer','freelancer.user'])
+        $paymentRequest = RequestPayment::with(['job', 'freelancer', 'freelancer.user'])
             ->findOrFail($request->input('paymentRequest.id'));
 
         $secretKey = '4c057d8ac62f4a3685785ac6edd41a40';
@@ -29,7 +33,7 @@ class PaymentController extends Controller
             "customer_info" => [
                 "name" => $paymentRequest->freelancer->user->name,
                 "email" => $paymentRequest->freelancer->user->email,
-                "phone" =>'9800000000',
+                "phone" => '9800000000',
             ]
         ];
 
@@ -54,4 +58,60 @@ class PaymentController extends Controller
         }
     }
 
+    public function payment(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect('/login');
+        }
+
+        $client = Client::where('user_id', $user->id)->first();
+        $paymentRequests = RequestPayment::where('client_id', $client->id)
+            ->with(['freelancer', 'job'])
+            ->latest()
+            ->get();
+
+        // Handle Khalti verification
+        if ($request->has('pidx')) {
+            $secretKey = '4c057d8ac62f4a3685785ac6edd41a40';
+            $response = Http::withHeaders([
+                'Authorization' => 'Key ' . $secretKey,
+                'Content-Type' => 'application/json'
+            ])->post('https://a.khalti.com/api/v2/epayment/lookup/', [
+                'pidx' => $request->query('pidx')
+            ]);
+
+            $request_id = null;
+            if ($request->has('purchase_order_id')) {
+                $request_id = $request->query('purchase_order_id');
+            }
+
+            if ($response->successful()) {
+                $paymentData = $response->json();
+                $status = 'approved';
+
+                // Update the payment status in the database
+                $paymentRequest = RequestPayment::where('id', $request_id)->first();
+                if ($paymentRequest) {
+                    $paymentRequest->update([
+                        'status' => $status,
+                    ]);
+                }
+
+                Session::flash('payment', $response->json());
+            } else {
+                Log::error('Khalti payment verification failed', [
+                    'response' => $response->body(),
+                ]);
+                Session::flash('error', 'Payment verification failed. Please try again.');
+            }
+            return redirect('/payment');
+        }
+
+        return Inertia::render('Payment', [
+            'paymentRequests' => $paymentRequests,
+            'payment' => Session::get('payment'),
+            'error' => Session::get('error'),
+        ]);
+    }
 }

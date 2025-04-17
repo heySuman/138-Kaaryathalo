@@ -82,7 +82,7 @@ export default function Show({
 
                         <div className="space-y-4">
                             <h2 className="text-2xl font-semibold">Skills and Expertise</h2>
-                            <div className="list-none space-y-2">
+                            <div className="list-none space-y-2 flex gap-2 items-center">
                                 {jobPosting.skills.map((item, index) => (
                                     <Badge key={index} variant="secondary">
                                         <span>{item}</span>
