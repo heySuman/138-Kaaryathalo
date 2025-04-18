@@ -72,6 +72,7 @@
         "react-dom": "^19.0.0",
         "react-quill": "^2.0.0",
         "react-quill-new": "^3.4.1",
+        "recharts": "^2.15.2",
         "sanitize-html": "^2.15.0",
         "sonner": "^2.0.1",
         "tailwind-merge": "^3.0.1",

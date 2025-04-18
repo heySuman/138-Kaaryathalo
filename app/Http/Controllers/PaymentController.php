@@ -71,7 +71,6 @@ class PaymentController extends Controller
             ->latest()
             ->get();
 
-        // Handle Khalti verification
         if ($request->has('pidx')) {
             $secretKey = '4c057d8ac62f4a3685785ac6edd41a40';
             $response = Http::withHeaders([
@@ -90,7 +89,6 @@ class PaymentController extends Controller
                 $paymentData = $response->json();
                 $status = 'approved';
 
-                // Update the payment status in the database
                 $paymentRequest = RequestPayment::where('id', $request_id)->first();
                 if ($paymentRequest) {
                     $paymentRequest->update([

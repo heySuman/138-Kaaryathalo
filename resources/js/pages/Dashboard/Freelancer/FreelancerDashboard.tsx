@@ -1,4 +1,3 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import FreelancerOverview from '@/pages/Dashboard/partials/FreelancerOverview';
 import ProfileRequiredCard from '@/pages/Freelancer/partials/popup-dialog/alert-create-profile';
@@ -10,9 +9,13 @@ type dashboardPageProps = {
     jobStatusCount: AppliedJobCount;
 };
 
-export default function FreelancerDashboard() {
+export type Earning = {
+    total: number;
+    month: number;
+};
+export default function FreelancerDashboard({ earningsData }: { earningsData: Earning[] }) {
     const { jobStatusCount, jobApplication } = usePage<SharedData<dashboardPageProps>>().props;
-    console.log(jobApplication)
+    console.log(jobApplication);
     return (
         <AppLayout>
             <Head title={'Dashboard'} />
@@ -26,19 +29,7 @@ export default function FreelancerDashboard() {
                             </div>
                         </div>
 
-                        {/*Tabs*/}
-                        <Tabs defaultValue="overview" className="">
-                            <TabsList>
-                                <TabsTrigger value="overview">Overview</TabsTrigger>
-                                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                                <TabsTrigger value="notifications">Notifications</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="overview" className={'mt-6'}>
-                                <FreelancerOverview jobCountStatus={jobStatusCount} />
-                            </TabsContent>
-                            <TabsContent value="analytics">Analytics</TabsContent>
-                            <TabsContent value="notifications">Notification</TabsContent>
-                        </Tabs>
+                        <FreelancerOverview jobCountStatus={jobStatusCount} earningsData={earningsData} />
                     </div>
                 </div>
             )}
