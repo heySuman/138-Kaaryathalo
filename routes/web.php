@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Client\MilestoneController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RatingReviewController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,11 +26,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-   Route::post('review', [RatingReviewController::class, 'store'])->name('review.store');
-   Route::put('review/{id}', [RatingReviewController::class, 'update'])->name('review.update');
-   Route::delete('review/{id}', [RatingReviewController::class, 'destroy'])->name('review.destroy');
+    Route::post('review', [RatingReviewController::class, 'store'])->name('review.store');
+    Route::put('review/{id}', [RatingReviewController::class, 'update'])->name('review.update');
+    Route::delete('review/{id}', [RatingReviewController::class, 'destroy'])->name('review.destroy');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/messages', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'store']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat/{user}', function (User $user) {
+        return Inertia::render('Chat/Show', [
+            'receiverId' => $user->id,
+            'receiver' => User::where('id', $user->id)->first(),
+        ]);
+    })->name('chat.show');
+
+    Route::get('/chat', function () {
+        return Inertia::render('Chat/Index', [
+            'users' => User::where('id', '!=', Auth::id())->get(),
+        ]);
+    })->name('chat.index');
+});
+
+Broadcast::routes(['middleware' => ['auth', 'web']]);;
 require __DIR__ . '/settings.php';
 require __DIR__ . '/freelancer.php';
 require __DIR__ . '/client.php';
