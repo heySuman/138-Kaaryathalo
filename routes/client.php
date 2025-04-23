@@ -4,6 +4,7 @@ use App\Http\Controllers\Client\ClientController;
 use \App\Http\Controllers\Dashboard\ClientDashboardController;
 use App\Http\Controllers\JobApplication\JobApplicationController;
 use App\Http\Controllers\JobPosting\JobPostingController;
+use App\Http\Controllers\TalentSearch;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->group(function () {
@@ -24,4 +25,7 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->group(
     Route::delete('my-jobs/{jobPosting}', [JobPostingController::class, 'destroy'])->name('client.job-posting.destroy');
 
     Route::patch('job-applications/{jobApplication}', [JobApplicationController::class, 'update'])->name('job-applications.update');
+
+    Route::get('talents', [TalentSearch::class, 'index'])->name('talent-search.index');
+    Route::get('talents/{id}', [TalentSearch::class, 'show'])->name('talent-search.show');
 });

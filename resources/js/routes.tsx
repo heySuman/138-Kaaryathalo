@@ -7,6 +7,7 @@ import {
     LayoutGrid,
     MessageSquare,
     Search,
+    SearchIcon,
     User
 } from 'lucide-react';
 
@@ -32,6 +33,11 @@ export const freelancerNavItems: NavItem[] = [
         icon: AppWindowMac,
     },
     {
+        title: 'Message',
+        href: '/chat',
+        icon: MessageSquare,
+    },
+    {
         title: 'Payments',
         href: '/freelancer/request-payment',
         icon: CurrencyIcon,
@@ -54,8 +60,13 @@ export const clientNavItems: NavItem[] = [
         icon: BriefcaseBusiness,
     },
     {
-        title: 'Inbox',
-        href: '/inbox',
+        title: 'Search talents',
+        href: '/client/talents',
+        icon: SearchIcon,
+    },
+    {
+        title: 'Message',
+        href: '/chat',
         icon: MessageSquare,
     },
     {
