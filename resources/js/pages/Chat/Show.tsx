@@ -4,18 +4,11 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import AppLayout from '@/layouts/app-layout';
 import { User } from '@/types';
+import { Message } from '@/types';
 import { Head } from '@inertiajs/react';
 import axios from 'axios';
 import { Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-
-type Message = {
-    id: number;
-    sender_id: number;
-    receiver_id: number;
-    message: string;
-    created_at: string;
-};
 
 type Props = {
     auth: { user: { id: number; name: string } };
@@ -75,8 +68,10 @@ export default function Chat({ auth, receiverId, receiver }: Props) {
                             const isSender = msg.sender_id === auth.user.id;
                             return (
                                 <div key={msg.id} className={`my-1 flex ${isSender ? 'justify-end' : 'justify-start'}`}>
-                                    <p className={` border w-fit rounded p-2 ${isSender ? 'bg-white' : 'bg-slate-900' +
-                                        ' text-white'}`}>{msg.message}</p>
+                                    <p className={`w-fit rounded border p-2 ${isSender ? 'bg-white dark:text-black' : 'bg-slate-900' +
+                                        ' text-white'}`}>
+                                        {msg.message}
+                                    </p>
                                 </div>
                             );
                         })}
