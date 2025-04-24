@@ -5,8 +5,16 @@ import { IFreelancer } from '@/types/freelancer';
 import { PaginatedResponse } from '@/types/job-postings';
 import { Head, Link, router } from '@inertiajs/react';
 import { Star } from 'lucide-react';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
-export default function Index({ freelancers }: { freelancers: PaginatedResponse<IFreelancer> }) {
+export default function Index({
+    freelancers,
+    filters,
+}: {
+    freelancers: PaginatedResponse<IFreelancer>;
+    filters: { name: string | null | undefined };
+}) {
     console.log(freelancers);
     const { current_page, last_page } = freelancers;
 
@@ -14,6 +22,13 @@ export default function Index({ freelancers }: { freelancers: PaginatedResponse<
         if (page < 1 || page > last_page) return;
         router.get(`/client/talents?page=${page}`);
     };
+
+    const [search, setSearch] = useState(filters.name || '');
+
+    const submitSearch = () => {
+        router.get(route('talent-search.index'), { name: search }, { preserveScroll: true });
+    };
+
     return (
         <Layout>
             <Head title="Search Talents" />
@@ -25,6 +40,13 @@ export default function Index({ freelancers }: { freelancers: PaginatedResponse<
                             <h2 className="text-3xl font-black">Find talents</h2>
                         </div>
                     </div>
+
+                    <div className={'flex gap-2 items-center my-6'}>
+                        <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name"
+                        className={'max-w-1/3'}/>
+                        <Button onClick={submitSearch}>Search</Button>
+                    </div>
+
                     <div className="mb-5 flex items-center justify-between">
                         <div className={'grid grid-cols-3 gap-4'}>
                             {freelancers.data &&
