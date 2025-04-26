@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone' => 'required|string|max:255',
-            'role' => ['required', 'in:freelancer,client'],
+            'role' => ['required', 'in:freelancer,client, admin'],
         ]);
 
         $user = User::create([
@@ -51,6 +51,15 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route(Auth::user()->role === 'client' ? 'client.dashboard' : 'freelancer.dashboard');
+        $redirectRoute = match (Auth::user()->role) {
+            'client' => 'client.dashboard',
+            'admin' => 'admin.dashboard',
+            'freelancer' => 'freelancer.dashboard',
+            default => 'freelancer.dashboard',
+        };
+
+        return to_route($redirectRoute);
+
+
     }
 }

@@ -7,6 +7,7 @@ import { Link } from '@inertiajs/react';
 enum ROLE {
     CLIENT = 'client',
     FREELANCER = 'freelancer',
+    ADMIN = 'admin',
 }
 
 const Header = ({ role, auth }: { role: ROLE; auth: Auth }) => {
@@ -28,11 +29,18 @@ const Header = ({ role, auth }: { role: ROLE; auth: Auth }) => {
                         <nav className="flex items-center justify-end gap-4">
                             {auth.user ? (
                                 <Link
-                                    href={role === ROLE.CLIENT ? route('client.dashboard') : route('freelancer.dashboard')}
+                                    href={
+                                        role === ROLE.CLIENT
+                                            ? route('client.dashboard')
+                                            : role === ROLE.ADMIN
+                                                ? route('admin.dashboard')
+                                                : route('freelancer.dashboard')
+                                    }
                                     className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                                 >
                                     Dashboard
                                 </Link>
+
                             ) : (
                                 <>
                                     <Link

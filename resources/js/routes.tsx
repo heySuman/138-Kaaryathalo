@@ -47,6 +47,12 @@ export const freelancerNavItems: NavItem[] = [
         href: '/freelancer/profile',
         icon: User,
     },
+];export const adminNavItems: NavItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+        icon: LayoutGrid,
+    },
 ];
 export const clientNavItems: NavItem[] = [
     {

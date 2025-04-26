@@ -44,6 +44,7 @@ export type User = {
 export enum ROLE {
     CLIENT = 'client',
     FREELANCER = 'freelancer',
+    ADMIN = 'admin',
 }
 
 export type Message = {

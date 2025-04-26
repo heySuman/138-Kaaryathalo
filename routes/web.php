@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Client\MilestoneController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
@@ -49,6 +50,10 @@ Route::middleware('auth')->group(function () {
             'users' => User::where('id', '!=', Auth::id())->get(),
         ]);
     })->name('chat.index');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
 Broadcast::routes(['middleware' => ['auth', 'web']]);;

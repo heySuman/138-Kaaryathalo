@@ -25,7 +25,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (! Auth::guard('web')->validate([
+        if (!Auth::guard('web')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,
         ])) {
@@ -36,6 +36,13 @@ class ConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended(route(Auth::user()->role === 'client' ? 'client.dashboard' : 'freelancer.dashboard', absolute: false));
+        $redirectRoute = match (Auth::user()->role) {
+            'client' => 'client.dashboard',
+            'admin' => 'admin.dashboard',
+            'freelancer' => 'freelancer.dashboard',
+            default => 'freelancer.dashboard',
+        };
+
+        return redirect()->intended(route($redirectRoute, absolute: false));
     }
 }
