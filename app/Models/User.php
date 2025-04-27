@@ -82,4 +82,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(RatingReview::class, 'reviewee_id');
     }
 
+    public function submittedDisputes(): HasMany
+    {
+        return $this->hasMany(Dispute::class, 'submitted_by_user_id');
+    }
+
 }

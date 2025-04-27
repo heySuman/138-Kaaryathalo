@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\DisputeController;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Client\MilestoneController;
@@ -54,6 +55,19 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('users', [AdminController::class, 'showUsers'])->name('admin.users');
+    Route::get('disputes', [DisputeController::class, 'adminIndex'])->name('admin.disputes.index');
+    Route::get('disputes/{id}', [DisputeController::class, 'adminShow'])->name('admin.disputes.show');
+    Route::patch('disputes/{id}', [DisputeController::class, 'adminUpdate'])->name('admin.disputes.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('disputes', [DisputeController::class, 'index'])->name('disputes.index');
+    Route::get('disputes/create/{jobPostingId}', [DisputeController::class, 'create'])->name('disputes.create');
+    Route::post('disputes', [DisputeController::class, 'store'])->name('disputes.store');
+    Route::get('disputes/{id}', [DisputeController::class, 'show'])->name('disputes.show');
+    Route::patch('disputes/{id}', [DisputeController::class, 'update'])->name('disputes.update');
+    Route::delete('disputes/{id}', [DisputeController::class, 'destroy'])->name('disputes.destroy');
 });
 
 Broadcast::routes(['middleware' => ['auth', 'web']]);;

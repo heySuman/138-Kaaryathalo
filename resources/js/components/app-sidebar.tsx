@@ -7,17 +7,18 @@ import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import AppLogo from './app-logo';
 
-export enum ROLE {
-    CLIENT = 'client',
-    FREELANCER = 'freelancer',
-    ADMIN = 'admin',
-}
-
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
     const mainNavItems = auth.user.role === 'freelancer' ? freelancerNavItems : auth.user.role === 'admin' ? adminNavItems : clientNavItems;
 
     const role = auth.user.role;
+
+    enum ROLE {
+        CLIENT = 'client',
+        FREELANCER = 'freelancer',
+        ADMIN = 'admin',
+    }
+
     return (
         <Sidebar collapsible="icon" variant="sidebar">
             <SidebarHeader>
