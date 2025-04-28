@@ -1,6 +1,6 @@
 export interface Dispute {
     id: number;
-    job_posting_id: number;
+    job_posting_id: number | undefined;
     submitted_by_user_id: number;
     user_type: 'freelancer' | 'client';
     dispute_type: 'payment_issue' | 'task_not_submitted';
@@ -11,4 +11,5 @@ export interface Dispute {
 
     job_posting?: JobPosting;
     user?: User;
+    submitted_by_user?: User;
 }

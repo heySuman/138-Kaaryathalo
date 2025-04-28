@@ -18,9 +18,9 @@ class DisputeController extends Controller
         $user = Auth::user();
 
         $disputes = Dispute::where('submitted_by_user_id', $user->id)
-            ->with(['jobPosting'])
+            ->with(['jobPosting', 'submittedByUser'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return Inertia::render('Dispute/Index', [
             'disputes' => $disputes,
@@ -30,13 +30,31 @@ class DisputeController extends Controller
     /**
      * Show a form to create a new dispute for a specific job posting.
      */
-    public function create($jobPostingId)
+    public function create()
     {
-        $jobPosting = JobPosting::findOrFail($jobPostingId)->with(['client', 'client.user']);
+        $role = Auth::user()->role;
 
-        return Inertia::render('Dispute/Create', [
-            'jobPosting' => $jobPosting,
-        ]);
+        if ($role === 'freelancer') {
+            $jobs = Auth::user()
+                ->freelancer
+                ->jobApplications()
+                ->where('status', 'accepted')
+                ->with('jobPosting')
+                ->get()
+                ->pluck('jobPosting');
+
+            return Inertia::render('Dispute/Create', [
+                'jobs' => $jobs,
+            ]);
+        } elseif ($role === 'client') {
+            $jobPostings = JobPosting::where('client_id', Auth::user()->client->id)->get();
+
+            return Inertia::render('Dispute/Create', [
+                'jobs' => $jobPostings,
+            ]);
+        } else {
+            abort(403, "Unauthorized access.");
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ use App\Http\Controllers\DisputeController;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Client\MilestoneController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RatingReviewController;
@@ -63,11 +64,15 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 
 Route::middleware(['auth'])->group(function () {
     Route::get('disputes', [DisputeController::class, 'index'])->name('disputes.index');
-    Route::get('disputes/create/{jobPostingId}', [DisputeController::class, 'create'])->name('disputes.create');
+    Route::get('disputes/create', [DisputeController::class, 'create'])->name('disputes.create');
     Route::post('disputes', [DisputeController::class, 'store'])->name('disputes.store');
     Route::get('disputes/{id}', [DisputeController::class, 'show'])->name('disputes.show');
     Route::patch('disputes/{id}', [DisputeController::class, 'update'])->name('disputes.update');
     Route::delete('disputes/{id}', [DisputeController::class, 'destroy'])->name('disputes.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('help', [HelpController::class, 'index'])->name('help.index');
 });
 
 Broadcast::routes(['middleware' => ['auth', 'web']]);;

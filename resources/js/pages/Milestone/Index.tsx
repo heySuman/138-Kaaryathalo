@@ -66,52 +66,59 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
                                     </div>
 
                                     <div className="">
-                                        {job.milestones?.map((milestone) => (
-                                            <div
-                                                key={milestone.id}
-                                                className="flex w-full flex-col flex-wrap gap-3 border-y p-4 sm:flex-row sm:items-center sm:justify-between"
-                                            >
-                                                <div>
-                                                    <h2 className="inline-block pr-2 font-medium">{milestone.title}</h2>
-                                                    <Badge
-                                                        variant={'outline'}
-                                                        className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
-                                                    >
-                                                        {milestone.status}
-                                                    </Badge>
+                                        {job.milestones.length > 0 &&
+                                            job.milestones?.map((milestone) => (
+                                                <div
+                                                    key={milestone.id}
+                                                    className="flex w-full flex-col flex-wrap gap-3 border-y p-4 sm:flex-row sm:items-center sm:justify-between"
+                                                >
+                                                    <div>
+                                                        <h2 className="inline-block pr-2 font-medium">{milestone.title}</h2>
+                                                        <Badge
+                                                            variant={'outline'}
+                                                            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
+                                                        >
+                                                            {milestone.status}
+                                                        </Badge>
+                                                    </div>
+                                                    <p className="overflow-hidden text-sm text-ellipsis text-slate-500 dark:text-slate-300">
+                                                        {milestone.description}
+                                                    </p>
+                                                    <div className="">
+                                                        <Label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                                            Update Status
+                                                        </Label>
+                                                        <Select
+                                                            defaultValue={milestone.status}
+                                                            disabled={milestone.status === 'completed'}
+                                                            onValueChange={(value) => handleStatusChange(milestone.id, value)}
+                                                        >
+                                                            <SelectTrigger className="mt-1 w-full">
+                                                                <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="pending">Pending</SelectItem>
+                                                                <SelectItem value="in progress">In Progress</SelectItem>
+                                                                <SelectItem value="completed">Completed</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
                                                 </div>
-                                                <p className="overflow-hidden text-sm text-ellipsis text-slate-500 dark:text-slate-300">
-                                                    {milestone.description}
-                                                </p>
-                                                <div className="">
-                                                    <Label className="text-xs font-medium text-slate-500 dark:text-slate-400">Update Status</Label>
-                                                    <Select
-                                                        defaultValue={milestone.status}
-                                                        disabled={milestone.status === 'completed'}
-                                                        onValueChange={(value) => handleStatusChange(milestone.id, value)}
-                                                    >
-                                                        <SelectTrigger className="mt-1 w-full">
-                                                            <SelectValue />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="pending">Pending</SelectItem>
-                                                            <SelectItem value="in progress">In Progress</SelectItem>
-                                                            <SelectItem value="completed">Completed</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
+                                            ))}
+                                        {job.milestones.length === 0 && (
+                                            <div className="flex w-full flex-col flex-wrap gap-3 border-y p-4 sm:flex-row sm:items-center sm:justify-between">
+                                                Client has not posted milestones, please contact client to add milestones.
                                             </div>
-                                        ))}
+                                        )}
                                     </div>
 
                                     {/* Request Payment Button */}
-                                    {allMilestonesCompleted(job) && (
+                                    {job.milestones.length > 0 && allMilestonesCompleted(job) && (
                                         <div className={'mt-6 flex items-center gap-2'}>
                                             <div className="flex items-center gap-2">
                                                 <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
-                                                    Request Payment
+                                                    {job.payment_request ? 'Requested.' : 'Request Payment' }
                                                 </Button>
-                                                <p>{job.payment_request && 'Requested.'}</p>
                                             </div>
                                             <LeaveReviewDialog job={job} freelancer={freelancer} />
                                         </div>

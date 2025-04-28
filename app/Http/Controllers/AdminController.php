@@ -16,7 +16,7 @@ class AdminController extends Controller
         $totalJobs = JobPosting::count();
         $totalTransactions = RequestPayment::count();
 
-        $recentDisputes = Dispute::with(['jobPosting', 'jobPosting.client', 'jobPosting.client.user'])->latest()
+        $recentDisputes = Dispute::with(['jobPosting', 'jobPosting.client', 'jobPosting.client.user', 'submittedByUser'])->latest()
             ->take(5)->get();
 
         return Inertia::render('Admin/Index', [

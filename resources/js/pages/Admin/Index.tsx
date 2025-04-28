@@ -83,7 +83,7 @@ export default function Index({
                                                                 </Link>
                                                             </div>
                                                         </TableCell>
-                                                        <TableCell>{dispute.user.name}</TableCell>
+                                                        <TableCell>{dispute.submitted_by_user.name}</TableCell>
                                                         <TableCell>{dispute.status}</TableCell>
                                                     </TableRow>
                                                 ))}

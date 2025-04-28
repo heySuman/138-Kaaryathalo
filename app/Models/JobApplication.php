@@ -41,4 +41,9 @@ class JobApplication extends Model
     {
         return $this->hasMany(Milestone::class, 'job_application_id');
     }
+
+    public function jobPosting()
+    {
+        return $this->belongsTo(JobPosting::class);
+    }
 }

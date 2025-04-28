@@ -3,9 +3,18 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { adminNavItems, clientNavItems, freelancerNavItems } from '@/routes';
-import { SharedData } from '@/types';
+import { NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { HelpCircle } from 'lucide-react';
 import AppLogo from './app-logo';
+
+const footerNavItems: NavItem[] = [
+    {
+        title: 'Help',
+        href: '/help',
+        icon: HelpCircle,
+    },
+];
 
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
@@ -47,7 +56,10 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={null} className="mt-auto" />
+                {
+                 auth.user.role !== 'admin' &&
+                <NavFooter items={footerNavItems} className="mt-auto" />
+                }
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

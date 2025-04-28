@@ -2,6 +2,7 @@
 
 namespace App\Models\Freelancer;
 
+use App\Models\JobApplication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,5 +35,10 @@ class Freelancer extends Model
     public function certificates(): HasMany
     {
         return $this->hasMany(Certificate::class);
+    }
+    
+    public function jobApplications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
     }
 }

@@ -14,6 +14,7 @@ export default function AdminIndex({ disputes }: { disputes: PaginatedResponse<D
         router.get(`/admin/disputes?page=${page}`);
     };
 
+    console.log(disputes);
     return (
         <Layout>
             <Head title="Disputes" />
@@ -48,7 +49,7 @@ export default function AdminIndex({ disputes }: { disputes: PaginatedResponse<D
                                                 </Link>
                                             </div>
                                         </TableCell>
-                                        <TableCell>{dispute.user.name}</TableCell>
+                                        <TableCell>{dispute.submitted_by_user.name}</TableCell>
                                         <TableCell>{dispute.status}</TableCell>
                                     </TableRow>
                                 ))}
