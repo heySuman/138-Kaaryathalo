@@ -36,8 +36,8 @@ class Freelancer extends Model
     {
         return $this->hasMany(Certificate::class);
     }
-    
-    public function jobApplications(): HasMany
+
+    public function jobapplications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }

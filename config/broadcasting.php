@@ -1,6 +1,6 @@
 <?php
 return [
-    'default' => env('BROADCAST_DRIVER', 'null'),
+    'default' => env('BROADCAST_DRIVER', 'pusher'),
 
     'pusher' => [
         'driver' => 'pusher',
