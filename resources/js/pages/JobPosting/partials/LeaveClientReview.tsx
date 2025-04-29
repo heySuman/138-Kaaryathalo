@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { SharedData } from '@/types';
+import { IFreelancer } from '@/types/freelancer';
 import { JobPosting, Review } from '@/types/job-postings';
 import { useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
@@ -12,15 +13,16 @@ import { toast } from 'sonner';
 interface Props {
     job: JobPosting;
     review?: Review;
+    freelancer: IFreelancer;
 }
 
-export default function LeaveReviewDialog({ job, review }: Props) {
+export default function LeaveClientReview({ job, review, freelancer }: Props) {
     const [open, setOpen] = useState(false);
     const auth = usePage<SharedData>().props.auth;
 
     const { data, setData, post, put, reset, processing, errors } = useForm({
         job_posting_id: job.id,
-        reviewee_id: review?.reviewee_id || job.client_user?.id,
+        reviewee_id: review?.reviewee_id || freelancer.user.id,
         reviewer_id: review?.reviewer_id || auth.user.id,
         rating: review?.rating || '',
         review: review?.review || '',
@@ -41,6 +43,7 @@ export default function LeaveReviewDialog({ job, review }: Props) {
         } else {
             post(route('review.store'), {
                 onSuccess: () => {
+                    console.log('Update Successful');
                     toast.success('Review submitted successfully');
                     setOpen(false);
                     reset();
@@ -48,6 +51,7 @@ export default function LeaveReviewDialog({ job, review }: Props) {
                 onError: () => {
                     toast.error('Failed to submit review');
                 },
+                preserveScroll: true,
             });
         }
     };
@@ -67,7 +71,8 @@ export default function LeaveReviewDialog({ job, review }: Props) {
                 <DialogHeader>
                     <DialogTitle>{review ? 'Update Your Review' : 'Leave a Review'}</DialogTitle>
                     <DialogDescription>
-                        Rate and review your client based on the job <strong>{job.title}</strong>.
+                        Rate and review talent based on the job done by{' '}
+                        <strong>{job.application?.find((application) => application?.status === 'accepted')?.freelancer?.user?.name || ''}</strong>.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -85,7 +90,6 @@ export default function LeaveReviewDialog({ job, review }: Props) {
                             value={data.review}
                             onChange={(e) => setData('review', e.target.value)}
                             placeholder="Write your feedback..."
-                            minLength={100}
                         />
                         {errors.review && <p className="text-sm text-red-500">{errors.review}</p>}
                     </div>

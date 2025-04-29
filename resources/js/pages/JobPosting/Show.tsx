@@ -5,12 +5,14 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AppLayout from '@/layouts/app-layout';
 import { JobPosting } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
-import {format, formatDistanceToNow} from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { ArrowLeft, Award, Calendar, CircleCheck, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
+import LeaveClientReview from '@/pages/JobPosting/partials/LeaveClientReview';
+import { IFreelancer } from '@/types/freelancer';
 
-export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
+export default function Show({ jobPosting, freelancer }: { jobPosting: JobPosting, freelancer: IFreelancer }) {
     console.log(jobPosting);
     const {
         data,
@@ -29,7 +31,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
 
     return (
         <AppLayout>
-            <Head title={jobPosting.title.replace(/^./, jobPosting.title[0].toUpperCase())} />
+            <Head title={jobPosting.title} />
 
             <div className="pt-6">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -47,20 +49,30 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         <div className="space-y-4">
                             <div className={'flex flex-wrap items-center gap-2'}>
                                 <h1 className="text-4xl font-bold capitalize">{jobPosting.title}</h1>
-                                <div className="flex gap-2">
-                                    <Link href={route('client.job-posting.edit', jobPosting.id)}>
-                                        <Button variant="outline" size="sm">
-                                            <Pencil className={'mr-1 h-4 w-4'} />
-                                            Edit
-                                        </Button>
-                                    </Link>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="sm" onClick={handleComplete}>
-                                        <CircleCheck className={'mr-1 h-4 w-4'} />
-                                        Mark as Complete
-                                    </Button>
-                                </div>
+                                {jobPosting.status === 'completed' ? (
+                                    <>
+                                        <div className="flex gap-2">
+                                            <LeaveClientReview job={jobPosting} freelancer={freelancer}/>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="flex gap-2">
+                                            <Link href={route('client.job-posting.edit', jobPosting.id)}>
+                                                <Button variant="outline" size="sm">
+                                                    <Pencil className={'mr-1 h-4 w-4'} />
+                                                    Edit
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Button variant="outline" size="sm" onClick={handleComplete}>
+                                                <CircleCheck className={'mr-1 h-4 w-4'} />
+                                                Mark as Complete
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -100,7 +112,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                         <Separator />
                         <div className="space-y-4">
                             <h2 className="text-2xl font-semibold">Skills and Expertise</h2>
-                            <div className="list-none flex gap-2">
+                            <div className="flex list-none gap-2">
                                 {jobPosting.skills.map((item, index) => (
                                     <Badge key={index} variant="secondary">
                                         <span>{item}</span>
@@ -126,7 +138,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                 {jobPosting.milestones &&
                                     jobPosting.milestones.map((milestone) => (
                                         <div key={milestone.id} className={'my-3 border-b p-2'}>
-                                            <div className={'flex items-center gap-2 mb-3'}>
+                                            <div className={'mb-3 flex items-center gap-2'}>
                                                 <h2 className={'text-xl font-bold capitalize'}>{milestone.title}</h2>
                                                 <Link href={route('milestones.edit', milestone)}>
                                                     <Button variant={'outline'} size={'sm'}>
@@ -142,11 +154,8 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                                                 </Button>
                                             </div>
                                             <p className={'mb- text-muted-foreground'}>{milestone.description}</p>
-                                            <p className={'my-3'}>Due Date: {format(milestone.due_date as string,'MMMM' +
-                                                ' dd, yyyy' )}</p>
-                                            <p className={'capitalize'}>
-                                                Status: {milestone.status}
-                                            </p>
+                                            <p className={'my-3'}>Due Date: {format(milestone.due_date as string, 'MMMM' + ' dd, yyyy')}</p>
+                                            <p className={'capitalize'}>Status: {milestone.status}</p>
                                         </div>
                                     ))}
                             </div>
@@ -194,6 +203,7 @@ export default function Show({ jobPosting }: { jobPosting: JobPosting }) {
                     </div>
                 </div>
             </div>
+            <Toaster/>
         </AppLayout>
     );
 }

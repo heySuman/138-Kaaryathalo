@@ -47,7 +47,9 @@ class MilestoneController extends Controller
                     'client_id' => $job->client_id,
                     'milestones' => $job->milestones,
                     'application' => $application,
-                    'payment_request' => RequestPayment::where('job_id', $job->id)->first() ?? null
+                    'payment_request' => RequestPayment::where('job_id', $job->id)->first() ?? null,
+                    'reviews' => $job->reviews,
+                    'client_user' => $job->client->user,
                 ];
             }
         }

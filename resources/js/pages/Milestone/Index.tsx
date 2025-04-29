@@ -8,11 +8,15 @@ import ProfileRequiredCard from '@/pages/Freelancer/partials/popup-dialog/alert-
 import LeaveReviewDialog from '@/pages/Milestone/partials/alert-dialog-rating-review';
 import { IFreelancer } from '@/types/freelancer';
 import { JobPosting } from '@/types/job-postings';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { toast, Toaster } from 'sonner';
 
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { SharedData } from '@/types';
+import { format } from 'date-fns';
+import { Star } from 'lucide-react';
+
 export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freelancer: IFreelancer }) {
-    console.log(jobs);
     const handleStatusChange = (milestoneId: number, newStatus: string) => {
         router.patch(
             route('milestones.update.status', milestoneId),
@@ -40,6 +44,16 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
         });
     };
 
+    const { delete: destroy } = useForm();
+
+    const handleDelete = (id: number) => {
+        destroy(route('review.destroy', id), {
+            onSuccess: () => toast.success('Review deleted successfully'),
+            onError: () => toast.error('Review deletion failed'),
+        });
+    };
+
+    const auth = usePage<SharedData>().props.auth;
     const allMilestonesCompleted = (job: JobPosting) => job.milestones?.length && job.milestones.every((m) => m.status === 'completed');
 
     return (
@@ -112,15 +126,54 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
                                         )}
                                     </div>
 
+                                    {job.reviews.length > 0 && (
+                                        <div className="mt-4">
+                                            <h4 className="text-lg font-bold text-slate-900 dark:text-white">Reviews</h4>
+                                            <ul className="space-y-3">
+                                                {job.reviews.map((review) => (
+                                                    <Card className="w-full max-w-md">
+                                                        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                                                            <div className="grid gap-1">
+                                                                <h3 className="leading-none font-semibold">Your Review</h3>
+                                                                <p className="text-muted-foreground text-sm">
+                                                                    Posted on {format(review.created_at, 'MMMM dd, yyyy')}
+                                                                </p>
+                                                            </div>
+                                                        </CardHeader>
+                                                        <CardContent className="pb-3">
+                                                            <div className="mb-2 flex">
+                                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                                    <Star
+                                                                        key={star}
+                                                                        className={`h-5 w-5 ${star <= 4 ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                            <h4 className="mb-2 font-medium"> {review.review}</h4>
+                                                        </CardContent>
+                                                        <Separator />
+                                                        <CardFooter className="flex gap-3 pt-3">
+                                                            <LeaveReviewDialog job={job} review={review} />
+                                                            <Button variant={'destructive'} size={'sm'} onClick={() => handleDelete(review.id)}>
+                                                                Delete
+                                                            </Button>
+                                                        </CardFooter>
+                                                    </Card>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
                                     {/* Request Payment Button */}
                                     {job.milestones.length > 0 && allMilestonesCompleted(job) && (
                                         <div className={'mt-6 flex items-center gap-2'}>
                                             <div className="flex items-center gap-2">
                                                 <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
-                                                    {job.payment_request ? 'Requested.' : 'Request Payment' }
+                                                    {job.payment_request ? 'Requested.' : 'Request Payment'}
                                                 </Button>
                                             </div>
-                                            <LeaveReviewDialog job={job} freelancer={freelancer} />
+
+                                            {!job.reviews?.find((review) => review.reviewer_id === auth.user.id) && <LeaveReviewDialog job={job} />}
                                         </div>
                                     )}
                                 </div>

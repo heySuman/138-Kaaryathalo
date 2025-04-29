@@ -56,9 +56,13 @@ class JobPosting extends Model
         return $this->HasMany(Milestone::class);
     }
 
-
     public function disputes(): HasMany
     {
         return $this->hasMany(Dispute::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(RatingReview::class);
     }
 }

@@ -1,8 +1,8 @@
 import { IClient } from '@/types/client';
 import { ICategory, IFreelancer } from '@/types/freelancer';
-import { SharedData } from '@/types/index';
+import { SharedData, User } from '@/types/index';
 import { JobApplication, Milestone } from '@/types/job-application';
-import {PaymentRequest} from "@/types/payment";
+import { PaymentRequest } from '@/types/payment';
 
 export type JobPosting = {
     id: number;
@@ -22,11 +22,13 @@ export type JobPosting = {
 
     category?: ICategory;
     client?: IClient;
+    client_user?: User
 
     application?: JobApplication[];
     milestones: Milestone[];
 
-    payment_request : PaymentRequest
+    payment_request: PaymentRequest;
+    reviews: Review[];
 
     created_at?: string | Date;
     updated_at?: string | Date;
@@ -75,3 +77,15 @@ interface AppliedJobCount {
     accepted: number;
     total: number;
 }
+
+type Review = {
+    id: number
+    job_posting_id: number;
+    reviewer_id: number;
+    reviewee_id: number;
+    rating: number;
+    review: string;
+
+    created_at: string | Date;
+    updated_at: string | Date;
+};

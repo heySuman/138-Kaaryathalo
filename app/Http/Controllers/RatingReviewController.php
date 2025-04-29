@@ -17,7 +17,6 @@ class RatingReviewController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|string',
         ]);
-
         RatingReview::create($validated);
 
         return redirect()->back()->with('success', 'Review submitted successfully!');
