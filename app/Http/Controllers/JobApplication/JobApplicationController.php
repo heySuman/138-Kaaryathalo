@@ -5,6 +5,7 @@ namespace App\Http\Controllers\JobApplication;
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
+use App\Notifications\NewJobApplication;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -62,6 +63,15 @@ class JobApplicationController extends Controller
                 return Cloudinary::upload($file->getRealPath())->getSecurePath();
             })->all();
         }
+
+        $jobPosting = JobPosting::findOrFail($validated['job_posting_id']);
+        $jobPoster = $jobPosting->client->user;
+
+        if ($jobPoster) {
+            \Log::info('Notifying job poster:', ['job_posting_id' => $jobPosting->id, 'jobPoster_id' => $jobPoster->id]);
+            $jobPoster->notify(new NewJobApplication($jobPosting));
+        }
+
 
         JobApplication::create($validated);
 

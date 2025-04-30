@@ -11,6 +11,7 @@ import { SharedData } from '@/types';
 import { IClient } from '@/types/client';
 import { JobCount, JobPosting } from '@/types/job-postings';
 import { Head, usePage } from '@inertiajs/react';
+import NotificationTab from '@/pages/Dashboard/client/notification-tab';
 
 type dashboardPageProps = {
     jobStatusCount: JobCount;
@@ -71,7 +72,9 @@ export default function ClientDashboard({ client }: { client: IClient }) {
                                     </Card>
                                 )}
                             </TabsContent>
-                            <TabsContent value="notifications">Notification</TabsContent>
+                            <TabsContent value="notifications">
+                                <NotificationTab/>
+                            </TabsContent>
                         </Tabs>
                     </div>
                 </div>

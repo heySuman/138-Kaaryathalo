@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Client\MilestoneController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RatingReviewController;
 use App\Models\User;
@@ -68,6 +69,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('help', [HelpController::class, 'index'])->name('help.index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 });
 
 Broadcast::routes(['middleware' => ['auth', 'web']]);;
