@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Events\MessageSent;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, User $user)
     {
-        $receiverId = $request->query('receiver_id');
-
-        $messages = Message::where(function ($q) use ($receiverId) {
-            $q->where('sender_id', auth()->id())
-                ->where('receiver_id', $receiverId);
-        })->orWhere(function ($q) use ($receiverId) {
-            $q->where('sender_id', $receiverId)
-                ->where('receiver_id', auth()->id());
-        })->orderBy('created_at')->get();
+        $authId = auth()->id();
+        $messages = Message::where(function ($query) use ($authId, $user) {
+            $query->where('sender_id', $authId)
+                ->where('receiver_id', $user->id);
+        })->orWhere(function ($query) use ($authId, $user) {
+            $query->where('sender_id', $user->id)
+                ->where('receiver_id', $authId);
+        })->orderBy('created_at', 'asc')->get();
 
         return response()->json($messages);
     }

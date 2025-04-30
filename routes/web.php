@@ -35,21 +35,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/messages', [MessageController::class, 'index']);
+    Route::get('/messages/{user}', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/chat/{user}', function (User $user) {
-        return Inertia::render('Chat/Show', [
-            'receiverId' => $user->id,
-            'receiver' => User::where('id', $user->id)->first(),
-        ]);
-    })->name('chat.show');
-
     Route::get('/chat', function () {
+        $role = Auth::user()->role;
         return Inertia::render('Chat/Index', [
-            'users' => User::where('id', '!=', Auth::id())->get(),
+            'users' => User::where('id', '!=', Auth::id())->where('role', $role === 'client' ? 'freelancer' : 'client' )->with([$role === 'client' ? 'freelancer' : 'client'])
+                ->get(),
         ]);
     })->name('chat.index');
 });

@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+import { IClient } from '@/types/client';
 
 export interface Auth {
     user: User;
@@ -39,6 +40,9 @@ export type User = {
     created_at: string;
     updated_at: string;
     role: ROLE;
+
+    freelancer?: IFreelancer;
+    client?: IClient;
 };
 
 export enum ROLE {
