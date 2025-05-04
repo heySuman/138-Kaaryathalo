@@ -1,19 +1,21 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { JobPosting } from '@/types/job-postings';
+import JobApplicationCard from '@/pages/JobPosting/JobApplicationCard';
+import FreelancerCard from '@/pages/JobPosting/partials/FreelancerCard';
+import { IFreelancer } from '@/types/freelancer';
+import { JobPosting, Review } from '@/types/job-postings';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ArrowLeft, Award, Calendar, CircleCheck, Pencil, Plus, Tag, TrashIcon } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 import { toast, Toaster } from 'sonner';
-import LeaveClientReview from '@/pages/JobPosting/partials/LeaveClientReview';
-import { IFreelancer } from '@/types/freelancer';
 
-export default function Show({ jobPosting, freelancer }: { jobPosting: JobPosting, freelancer: IFreelancer }) {
+export default function Show({ jobPosting, freelancer, review }: { jobPosting: JobPosting; freelancer: IFreelancer, review: Review }) {
     console.log(jobPosting);
+    console.log(freelancer);
+    console.log(review);
     const {
         data,
         patch,
@@ -31,8 +33,8 @@ export default function Show({ jobPosting, freelancer }: { jobPosting: JobPostin
 
     return (
         <AppLayout>
-            <Head title={jobPosting.title} />
-
+            <Head title={jobPosting.title.toUpperCase()} />
+            {/*Back Button*/}
             <div className="pt-6">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-2 flex items-center justify-between">
@@ -43,19 +45,14 @@ export default function Show({ jobPosting, freelancer }: { jobPosting: JobPostin
                 </div>
             </div>
 
+            {/*Job Posting Details*/}
             <div className="">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-4">
-                    <div className="my-4 space-y-8 border-r lg:w-3/4">
+                <div className="mx-auto grid max-w-7xl grid-cols-4 px-4 sm:px-6 lg:px-8 lg:py-4">
+                    <div className="col-span-3 space-y-8 border-r">
                         <div className="space-y-4">
                             <div className={'flex flex-wrap items-center gap-2'}>
                                 <h1 className="text-4xl font-bold capitalize">{jobPosting.title}</h1>
-                                {jobPosting.status === 'completed' ? (
-                                    <>
-                                        <div className="flex gap-2">
-                                            <LeaveClientReview job={jobPosting} freelancer={freelancer}/>
-                                        </div>
-                                    </>
-                                ) : (
+                                {jobPosting.status !== 'completed' && (
                                     <>
                                         <div className="flex gap-2">
                                             <Link href={route('client.job-posting.edit', jobPosting.id)}>
@@ -161,49 +158,19 @@ export default function Show({ jobPosting, freelancer }: { jobPosting: JobPostin
                             </div>
                         </section>
                         <Separator />
-                        <section>
-                            <h1 className={'mb-5 text-2xl font-bold'}>Applications</h1>
-                            <Table className={'rounded border'}>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className={'rounded-tl-lg'}>Application</TableHead>
-                                        <TableHead>Freelancer</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead className={'rounded-tr-lg'}>Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {jobPosting.application?.map((application) => (
-                                        <TableRow key={application.id}>
-                                            <TableCell className="font-medium">{application.id}</TableCell>
-                                            <TableCell className={'col-span-3 capitalize'}>{application.freelancer.user.name}</TableCell>
-                                            <TableCell>
-                                                <Badge className={'capitalize'}>{application.status}</Badge>
-                                            </TableCell>
-                                            <TableCell className="flex gap-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    disabled={application.status === 'accepted' || application.status === 'rejected'}
-                                                    onClick={() => patch(route('job-applications.update', application))}
-                                                >
-                                                    Approve
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                {jobPosting.application && jobPosting.application?.length < 1 && (
-                                    <TableCaption>No applications is found</TableCaption>
-                                )}
-                            </Table>
-                        </section>
-
-                        <section></section>
+                        <JobApplicationCard jobPosting={jobPosting} patch={patch} />
                     </div>
+
+                    {/*Freelancer Detail*/}
+                    {
+                     freelancer &&
+                    <section className={'col-span-1 sticky top-16 '}>
+                        <FreelancerCard freelancer={freelancer} jobPosting={jobPosting} review={review}/>
+                    </section>
+                    }
                 </div>
             </div>
-            <Toaster/>
+            <Toaster />
         </AppLayout>
     );
 }

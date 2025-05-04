@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Freelancer\Category;
 use App\Models\JobPosting;
+use App\Models\RatingReview;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,14 +77,19 @@ class JobPostingController extends Controller
     public function show(JobPosting $jobPosting): Response
     {
         $jobPosting->load('category', 'client','application.freelancer.user', 'milestones');
+
         $acceptedApplication = $jobPosting->application()
             ->where('status', 'accepted')
             ->with(['freelancer.user'])
             ->first();
+
         $freelancer = $acceptedApplication?->freelancer;
+        $reviews = RatingReview::where('reviewer_id', Auth::id())->where('job_posting_id', $jobPosting->id)->first();
+
         return Inertia::render('JobPosting/Show', [
             'jobPosting' => $jobPosting,
             'freelancer' => $freelancer ?? null,
+            'review' => $reviews ?? null,
         ]);
     }
 

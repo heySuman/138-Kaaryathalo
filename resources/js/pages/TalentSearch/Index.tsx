@@ -7,6 +7,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
+import { RenderStars } from '@/pages/JobPosting/partials/FreelancerCard';
 
 export default function Index({
     freelancers,
@@ -59,17 +60,13 @@ export default function Index({
                                                 className="h-20 w-20 rounded-full border"
                                             />
                                         </div>
-                                        <div>
+                                        <div className={'flex flex-col justify-center'}>
                                             <Link href={route('talent-search.show', freelancer.id)} className="hover:underline" key={freelancer.id}>
-                                                <h2 className={'text-md font-bold'}>{freelancer.user.name}</h2>
+                                                <h2 className={'text-xl font-bold'}>{freelancer.user.name}</h2>
                                             </Link>
 
-                                            <p className={'text-xl font-bold'}>{freelancer.headline}</p>
+                                            <p className={'text-md'}>{freelancer.headline}</p>
 
-                                            <div className={'flex items-center gap-2'}>
-                                                <Star fill={'#FFC700'} size={16} />
-                                                <p>4.5/5</p>
-                                            </div>
                                         </div>
                                     </div>
                                 ))}

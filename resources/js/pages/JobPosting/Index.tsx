@@ -101,11 +101,14 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                                                 <TableCell>{job.application?.length || 0}</TableCell>
                                                 <TableCell>{job.status}</TableCell>
                                                 <TableCell className="flex gap-2">
+                                                    {
+                                                     job.status !== 'completed' &&
                                                     <Link href={route('client.job-posting.edit', job.id)}>
                                                         <Button variant="outline" size="sm">
                                                             Edit
                                                         </Button>
                                                     </Link>
+                                                    }
                                                     <AlertDialog
                                                         open={deletingJob?.id === job.id}
                                                         onOpenChange={(open) => (open ? setDeletingJob(job) : setDeletingJob(null))}
