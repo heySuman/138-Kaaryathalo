@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { JobApplication } from '@/types/job-application';
 import { PaginatedResponse } from '@/types/job-postings';
 import { Head, Link, router } from '@inertiajs/react';
+import { Badge } from '@/components/ui/badge';
 
 export default function Index({ applications }: { applications: PaginatedResponse<JobApplication> }) {
     const { current_page, last_page } = applications;
@@ -53,11 +54,11 @@ export default function Index({ applications }: { applications: PaginatedRespons
                                             </Link>
                                         </TableCell>
                                         <TableCell>
-                                            <span
+                                            <Badge
                                                 className={`rounded px-2 py-1 text-xs font-semibold capitalize`}
                                             >
                                                 {application.status}
-                                            </span>
+                                            </Badge>
                                         </TableCell>
                                     </TableRow>
                                 ))

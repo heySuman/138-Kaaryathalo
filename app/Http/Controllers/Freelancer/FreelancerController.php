@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Freelancer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Freelancer\Freelancer;
+use App\Models\RatingReview;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,12 @@ class FreelancerController extends Controller
     public function index()
     {
         $id = Auth::id();
+        $reviews = RatingReview::where('reviewee_id', $id)->with(['reviewer'])->get();
         $freelancer = Freelancer::with(['user', 'projects', 'experiences', 'certificates'])->where('user_id', $id)->first();
-        return Inertia::render('Freelancer/Index', ['freelancer' => $freelancer ?: null]);
+        return Inertia::render('Freelancer/Index', [
+            'freelancer' => $freelancer ?? null,
+            'reviews' => $reviews ?? null,
+        ]);
     }
 
     public function store(Request $request): RedirectResponse

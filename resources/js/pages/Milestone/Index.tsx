@@ -11,10 +11,9 @@ import { JobPosting } from '@/types/job-postings';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { toast, Toaster } from 'sonner';
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { RenderStars } from '@/pages/JobPosting/partials/FreelancerCard';
 import { SharedData } from '@/types';
 import { format } from 'date-fns';
-import { Star } from 'lucide-react';
 
 export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freelancer: IFreelancer }) {
     const handleStatusChange = (milestoneId: number, newStatus: string) => {
@@ -76,32 +75,29 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
                             {jobs.map((job) => (
                                 <div key={job.id} className="py-6">
                                     <div className="mb-6">
-                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{job.title}</h3>
+                                        <h3 className="text-2xl font-bold text-slate-900 capitalize dark:text-white">{job.title}</h3>
                                     </div>
 
+                                    {/* ------------------------------------- Milestones  ------------------------------------------------- */}
                                     <div className="">
                                         {job.milestones.length > 0 &&
                                             job.milestones?.map((milestone) => (
-                                                <div
-                                                    key={milestone.id}
-                                                    className="flex w-full flex-col flex-wrap gap-3 border-y p-4 sm:flex-row sm:items-center sm:justify-between"
-                                                >
+                                                <div key={milestone.id} className="flex flex-col flex-wrap gap-3 border-y py-4">
                                                     <div>
-                                                        <h2 className="inline-block pr-2 font-medium">{milestone.title}</h2>
+                                                        <h2 className="inline-block pr-2 text-xl font-bold">{milestone.title}</h2>
                                                         <Badge
-                                                            variant={'outline'}
                                                             className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
                                                         >
                                                             {milestone.status}
                                                         </Badge>
                                                     </div>
-                                                    <p className="overflow-hidden text-sm text-ellipsis text-slate-500 dark:text-slate-300">
-                                                        {milestone.description}
-                                                    </p>
-                                                    <div className="">
-                                                        <Label className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                                            Update Status
-                                                        </Label>
+
+                                                    <div>
+                                                        <p className={'font-bold text-lg my-3'}>Description</p>
+                                                        <p className="text-md overflow-hidden">{milestone.description}</p>
+                                                    </div>
+                                                    <div className="max-w-xs my-3">
+                                                        <Label className="text-md">Update Status</Label>
                                                         <Select
                                                             defaultValue={milestone.status}
                                                             disabled={milestone.status === 'completed'}
@@ -125,53 +121,44 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
                                             </div>
                                         )}
                                     </div>
-
+                                    {/*------------------------------------------ Rating & Reviews ------------------------------------------------- */}
                                     {job.reviews.length > 0 && (
                                         <div className="mt-4">
-                                            <h4 className="text-lg font-bold text-slate-900 dark:text-white">Reviews</h4>
+                                            <h4 className="mb-4 text-lg font-bold text-slate-900 dark:text-white">Reviews</h4>
                                             <ul className="space-y-3">
                                                 {job.reviews.map((review) => (
-                                                    <Card className="w-full max-w-md">
-                                                        <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                                                            <div className="grid gap-1">
-                                                                <h3 className="leading-none font-semibold">Your Review</h3>
-                                                                <p className="text-muted-foreground text-sm">
-                                                                    Posted on {format(review.created_at, 'MMMM dd, yyyy')}
-                                                                </p>
-                                                            </div>
-                                                        </CardHeader>
-                                                        <CardContent className="pb-3">
-                                                            <div className="mb-2 flex">
-                                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                                    <Star
-                                                                        key={star}
-                                                                        className={`h-5 w-5 ${star <= 4 ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                            <h4 className="mb-2 font-medium"> {review.review}</h4>
-                                                        </CardContent>
-                                                        <Separator />
-                                                        <CardFooter className="flex gap-3 pt-3">
+                                                    <div>
+                                                        <div className={'flex items-center gap-2'}>
+                                                            <h2 className="text-xl font-medium"> {review.review}</h2>
+                                                            <RenderStars rating={review.rating} />
+                                                        </div>
+                                                        <div className="my-4">
+                                                            <p className="text-muted-foreground text-sm">
+                                                                Posted on {format(review.created_at, 'MMMM dd, yyyy')}
+                                                            </p>
+                                                        </div>
+                                                        <div className={'flex items-center gap-2'}>
                                                             <LeaveReviewDialog job={job} review={review} />
                                                             <Button variant={'destructive'} size={'sm'} onClick={() => handleDelete(review.id)}>
                                                                 Delete
                                                             </Button>
-                                                        </CardFooter>
-                                                    </Card>
+                                                        </div>
+                                                    </div>
                                                 ))}
                                             </ul>
                                         </div>
                                     )}
-
+                                    {/*----------------------- Action Buttons------------------------*/}
                                     {/* Request Payment Button */}
                                     {job.milestones.length > 0 && allMilestonesCompleted(job) && (
                                         <div className={'mt-6 flex items-center gap-2'}>
-                                            <div className="flex items-center gap-2">
-                                                <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
-                                                    {job.payment_request ? 'Requested.' : 'Request Payment'}
-                                                </Button>
-                                            </div>
+                                            {!job.payment_request && (
+                                                <div className="flex items-center gap-2">
+                                                    <Button size={'sm'} disabled={!!job.payment_request} onClick={() => handleRequestPayment(job)}>
+                                                        {job.payment_request ? 'Requested.' : 'Request Payment'}
+                                                    </Button>
+                                                </div>
+                                            )}
 
                                             {!job.reviews?.find((review) => review.reviewer_id === auth.user.id) && <LeaveReviewDialog job={job} />}
                                         </div>

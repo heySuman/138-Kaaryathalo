@@ -1,17 +1,19 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { CertificateCard } from '@/pages/Freelancer/partials/certificate-card';
 import { ExperienceCard } from '@/pages/Freelancer/partials/experience-card';
 import ProfileRequiredCard from '@/pages/Freelancer/partials/popup-dialog/alert-create-profile';
 import { ProfileCard } from '@/pages/Freelancer/partials/profile-card';
 import { ProjectCard } from '@/pages/Freelancer/partials/project-card';
-import { SharedData } from '@/types';
+import { RenderStars } from '@/pages/JobPosting/partials/FreelancerCard';
 import { IFreelancer } from '@/types/freelancer';
-import { Head, usePage } from '@inertiajs/react';
+import { Review } from '@/types/job-postings';
+import { Head } from '@inertiajs/react';
 import { AlertCircleIcon } from 'lucide-react';
 
-export default function Index() {
-    const { freelancer } = usePage<SharedData<{ freelancer: IFreelancer }>>().props;
-    console.log(freelancer);
+export default function Index({ freelancer, reviews }: { freelancer: IFreelancer; reviews: Review[] }) {
+
     return (
         <AppLayout>
             <Head title="Profile" />
@@ -30,6 +32,28 @@ export default function Index() {
                     <CertificateCard freelancer={freelancer} />
                     <ExperienceCard freelancer={freelancer} />
                     <ProjectCard freelancer={freelancer} />
+                    <Card className="mx-auto w-[90%] overflow-hidden border-0 shadow-none">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle className="text-2xl">Rating & Reviews</CardTitle>
+                        </CardHeader>
+                        <CardContent className="border-0">
+                            <Separator />
+                            <div className="mt-2 flex flex-col gap-4">
+                                {reviews && reviews.length > 0
+                                    ? reviews.map((review, i) => (
+                                          <div className="space-y-1" key={i}>
+                                              <div className={'flex items-center gap-3'}>
+                                                  <h3 className="text-md font-semibold">{review.review}</h3>
+
+                                                  <RenderStars rating={review.rating} />
+                                              </div>
+                                              <p className="text-muted-foreground text-md">{review.reviewer?.name}</p>
+                                          </div>
+                                      ))
+                                    : `${freelancer.user.name} have not added any reviews.`}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </section>
             )}
         </AppLayout>

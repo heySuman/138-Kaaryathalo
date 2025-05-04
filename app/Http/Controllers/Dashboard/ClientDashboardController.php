@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\JobPosting;
+use App\Models\RatingReview;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\Inertia;
@@ -20,7 +21,6 @@ class ClientDashboardController extends Controller
 
         if (!$client) {
             // Handle the case where the client does not exist
-            // For example, you can return an error response or redirect
             return Inertia::render('Dashboard/client/ClientDashboard', [
                 'message' => 'Client not found.'
             ]);
@@ -43,7 +43,8 @@ class ClientDashboardController extends Controller
         return Inertia::render('Dashboard/client/ClientDashboard', [
             "client" => $client,
             "jobStatusCount" => $jobCountStatus,
-            "latestJobPostings" => $latest_job_postings
+            "latestJobPostings" => $latest_job_postings,
+            "reviews" => RatingReview::where("reviewee_id", $user->id)->with(['reviewer'])->get() ?? null
         ]);
     }
 }

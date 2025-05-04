@@ -7,6 +7,7 @@ use App\Models\Freelancer\Freelancer;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
 use App\Models\Milestone;
+use App\Models\RatingReview;
 use App\Models\RequestPayment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,7 +49,9 @@ class MilestoneController extends Controller
                     'milestones' => $job->milestones,
                     'application' => $application,
                     'payment_request' => RequestPayment::where('job_id', $job->id)->first() ?? null,
-                    'reviews' => $job->reviews,
+                    'reviews' => RatingReview::where('reviewee_id', $job->client->user_id)->where('job_posting_id', $job->id)
+                            ->with(['reviewer'])
+                        ->get() ?? null,
                     'client_user' => $job->client->user,
                 ];
             }
