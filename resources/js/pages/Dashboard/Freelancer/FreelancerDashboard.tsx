@@ -13,9 +13,10 @@ export type Earning = {
     total: number;
     month: number;
 };
-export default function FreelancerDashboard({ earningsData }: { earningsData: Earning[] }) {
-    const { jobStatusCount, jobApplication } = usePage<SharedData<dashboardPageProps>>().props;
-    console.log(jobApplication);
+
+export default function FreelancerDashboard({ earningsData, totalEarnings }: { earningsData: Earning[], totalEarnings: number }) {
+    const { jobStatusCount } = usePage<SharedData<dashboardPageProps>>().props;
+    console.log(earningsData)
     return (
         <AppLayout>
             <Head title={'Dashboard'} />
@@ -29,7 +30,7 @@ export default function FreelancerDashboard({ earningsData }: { earningsData: Ea
                             </div>
                         </div>
 
-                        <FreelancerOverview jobCountStatus={jobStatusCount} earningsData={earningsData} />
+                        <FreelancerOverview jobCountStatus={jobStatusCount} earningsData={earningsData} totalEarning={totalEarnings}/>
                     </div>
                 </div>
             )}

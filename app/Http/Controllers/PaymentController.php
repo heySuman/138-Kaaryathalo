@@ -106,10 +106,15 @@ class PaymentController extends Controller
             return redirect('/payment');
         }
 
+        $pendingAmount = RequestPayment::where('client_id', $client->id)->where('status', 'pending')->sum('amount');
+        $paidAmount = RequestPayment::where('client_id', $client->id)->where('status', 'approved')->sum('amount');
+
         return Inertia::render('Payment', [
             'paymentRequests' => $paymentRequests,
             'payment' => Session::get('payment'),
             'error' => Session::get('error'),
+            'pendingAmount' => $pendingAmount,
+            'paidAmount' => $paidAmount,
         ]);
     }
 }

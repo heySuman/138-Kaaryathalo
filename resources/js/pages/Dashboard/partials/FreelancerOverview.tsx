@@ -4,7 +4,15 @@ import { AppliedJobCount } from '@/types/job-postings';
 import { Activity, CircleCheckBig, CircleXIcon, GalleryVerticalEnd } from 'lucide-react';
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-export default function FreelancerOverview({ jobCountStatus, earningsData }: { jobCountStatus: AppliedJobCount; earningsData: Earning[] }) {
+export default function FreelancerOverview({
+    jobCountStatus,
+    earningsData,
+    totalEarning,
+}: {
+    jobCountStatus: AppliedJobCount;
+    earningsData: Earning[];
+    totalEarning: number;
+}) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const chartData = earningsData.map((item) => ({
         month: months[item.month - 1],
@@ -32,12 +40,9 @@ export default function FreelancerOverview({ jobCountStatus, earningsData }: { j
             </div>
 
             <Card>
-                <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-                    <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                        <CardTitle>Total Earning</CardTitle>
-                        <CardDescription>Showing total earnings for the last 12 months</CardDescription>
-                    </div>
-                    <div className="flex"></div>
+                <CardHeader className="">
+                    <CardTitle className={'mb-2 text-2xl'}>Total Earnings</CardTitle>
+                    <CardDescription>Showing total earnings for the last 12 months</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={300}>

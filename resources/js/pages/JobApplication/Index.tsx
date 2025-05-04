@@ -28,7 +28,7 @@ export default function Index({ applications }: { applications: PaginatedRespons
                     </div>
 
                     <Separator />
-                    <Table className="my-5 border">
+                    <Table className="my-5">
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Job Title</TableHead>
@@ -54,13 +54,7 @@ export default function Index({ applications }: { applications: PaginatedRespons
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`rounded px-2 py-1 text-xs font-semibold capitalize ${
-                                                    application.status === 'accepted'
-                                                        ? 'bg-green-100 text-green-600'
-                                                        : application.status === 'pending'
-                                                          ? 'bg-yellow-100 text-yellow-600'
-                                                          : 'bg-red-100 text-red-600'
-                                                }`}
+                                                className={`rounded px-2 py-1 text-xs font-semibold capitalize`}
                                             >
                                                 {application.status}
                                             </span>

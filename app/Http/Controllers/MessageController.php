@@ -18,7 +18,12 @@ class MessageController extends Controller
         })->orWhere(function ($query) use ($authId, $user) {
             $query->where('sender_id', $user->id)
                 ->where('receiver_id', $authId);
-        })->orderBy('created_at', 'asc')->get();
+        })->orderBy('created_at')->get();
+
+        $messages = $messages->map(function ($message) {
+            $message->message = decrypt($message->message);
+            return $message;
+        });
 
         return response()->json($messages);
     }
@@ -30,13 +35,13 @@ class MessageController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
+        $encryptedMessage = encrypt($validated['message']);
+
         $message = Message::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $validated['receiver_id'],
-            'message' => $validated['message'],
+            'message' => $encryptedMessage,
         ]);
-
-        broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);
     }

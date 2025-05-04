@@ -35,7 +35,7 @@ class FreelancerDashboardController extends Controller
         ];
 
         $raw = RequestPayment::selectRaw('SUM(amount) as total, EXTRACT(MONTH FROM created_at) as month')
-            ->where('freelancer_id', Auth::id())
+            ->where('freelancer_id', $freelancer->id)
             ->groupByRaw('EXTRACT(MONTH FROM created_at)')
             ->orderByRaw('EXTRACT(MONTH FROM created_at)')
             ->get()
@@ -48,11 +48,14 @@ class FreelancerDashboardController extends Controller
             ];
         });
 
+        $totalEarnings = RequestPayment::where('freelancer_id', $freelancer->id)->where('status', 'approved')->sum('amount');
+
         return Inertia::render('Dashboard/Freelancer/FreelancerDashboard', [
             'jobStatusCount' => $appliedJobCountStatus,
             'jobApplication' => JobApplication::where('freelancer_id', $freelancer->id)->with(['job'])
                 ->paginate(10),
             'earningsData' => $fullYear,
+            'totalEarnings' => $totalEarnings,
         ]);
     }
 }

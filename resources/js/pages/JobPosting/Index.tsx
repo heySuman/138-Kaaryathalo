@@ -68,15 +68,14 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                         <Separator />
 
                         {/*Search Job*/}
-                        <div className={'mt-5 flex justify-between'}>
-                            <Input className={'max-w-[350px] ring-0'} placeholder={'Search job...'} />
+                        <div className={'mt-5 flex justify-end'}>
                             <Link href={route('client.job-posting.create')}>
                                 <Button size={'sm'}>+ Add New Job</Button>
                             </Link>
                         </div>
 
                         <div className="mt-2">
-                            <Table className={'mt-3 w-full rounded border capitalize'}>
+                            <Table className={'mt-3 w-full rounded capitalize'}>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="w-[100px]">Job Id</TableHead>

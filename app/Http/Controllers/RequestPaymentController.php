@@ -21,8 +21,13 @@ class RequestPaymentController extends Controller
         }
         $paymentRequests = RequestPayment::where('freelancer_id', $freelancer->id)->with(['job'])->latest()->get();
 
+        $pendingAmount = RequestPayment::where('client_id', $freelancer->id)->where('status', 'pending')->sum('amount');
+        $paidAmount = RequestPayment::where('client_id', $freelancer->id)->where('status', 'approved')->sum('amount');
+
         return Inertia::render('Freelancer/RequestPayment', [
             'paymentRequests' => $paymentRequests ?? null,
+            'pendingAmount' => $pendingAmount,
+            'paidAmount' => $paidAmount,
         ]);
     }
 

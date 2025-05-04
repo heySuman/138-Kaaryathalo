@@ -43,7 +43,7 @@ export default function ClientOverview({jobCountStatus, latestJobPostings}: {
                 </CardHeader>
                 <CardContent>
                     <div className="mt-2 overflow-x-scroll lg:overflow-x-hidden">
-                        <Table className={'w-full border rounded-md mt-3 capitalize'}>
+                        <Table className={'w-full rounded-md mt-3 capitalize'}>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Job ID</TableHead>
