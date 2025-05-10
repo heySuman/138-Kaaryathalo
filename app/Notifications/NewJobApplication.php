@@ -23,18 +23,25 @@ class NewJobApplication extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'mail'];;
     }
 
     /**
      * Database Representation of Notification
      */
-    public function toDatabase($notifiable)
+    public function toDatabase($notifiable): array
     {
         return [
             'job_id' => $this->job->id,
             'job_title' => $this->job->title,
             'message' => 'Your job posting has received a new application!',
         ];
+    }
+
+    public function toMail($notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->line('Your job posting has received a new application!')
+            ->action('View Job', url(':8000/client/my-jobs/' . $this->job->id));
     }
 }
