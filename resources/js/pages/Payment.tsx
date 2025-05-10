@@ -47,6 +47,25 @@ export default function Payment({
         }
     }, []);
 
+    const handleReject = (paymentRequest: PaymentRequest) => {
+        router.patch(
+            route('payment.reject'),
+            {
+                paymentRequest: {
+                    id: paymentRequest.id,
+                },
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Payment rejected!');
+                },
+                onError: () => {
+                    toast.error('Something went wrong');
+                },
+            },
+        );
+    };
+
     return (
         <AppLayout>
             <Head title={'Payment'} />
@@ -108,6 +127,7 @@ export default function Payment({
                                                     size="sm"
                                                     variant="destructive"
                                                     disabled={paymentRequest.status === 'approved' || paymentRequest.status === 'rejected'}
+                                                    onClick={() => handleReject(paymentRequest)}
                                                 >
                                                     Reject
                                                 </Button>

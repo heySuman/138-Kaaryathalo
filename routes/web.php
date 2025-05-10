@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/khalti', [PaymentController::class, 'handlePayment'])->name('khalti.handle');
     Route::get('/payment', [PaymentController::class, 'payment'])->name('payment');
+    Route::patch('/reject-payment', [PaymentController::class, 'rejectPayment'])->name('payment.reject');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

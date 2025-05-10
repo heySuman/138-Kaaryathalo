@@ -117,4 +117,18 @@ class PaymentController extends Controller
             'paidAmount' => $paidAmount,
         ]);
     }
+
+    public function rejectPayment(Request $request)
+    {
+        $validated = $request->validate([
+            'paymentRequest.id' => 'required|integer|exists:request_payments,id',
+        ]);
+
+        $paymentRequest = RequestPayment::with(['job', 'freelancer', 'freelancer.user'])
+            ->findOrFail($request->input('paymentRequest.id'));
+        $paymentRequest->update([
+            'status' => 'rejected',
+        ]);
+        return redirect('/payment');
+    }
 }

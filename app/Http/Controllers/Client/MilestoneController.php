@@ -32,8 +32,8 @@ class MilestoneController extends Controller
         $applications = JobApplication::with(['job.milestones'])
             ->where('freelancer_id', $freelancer->id)
             ->where('status', 'accepted')
+            ->latest()
             ->get();
-
         $jobs = [];
 
         foreach ($applications as $application) {
