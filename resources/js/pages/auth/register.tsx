@@ -93,7 +93,7 @@ export default function Register() {
                             maxLength={10}
                             minLength={10}
                         />
-                        <InputError message={errors.email} />
+                        <InputError message={errors.phone} />
                     </div>
 
                     <div className="grid gap-2">

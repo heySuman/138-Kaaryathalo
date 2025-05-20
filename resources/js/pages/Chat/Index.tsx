@@ -53,23 +53,33 @@ export default function Index({ users }: { users: User[] }) {
     };
 
     useEffect(() => {
-        const handleFetchMessage = async () => {
-            if (!selectedUser) return;
+        if (!selectedUser) return;
 
-            const res = await axios.get('/messages/' + selectedUser?.id);
-            console.log(res);
-            if (res.status === 200) {
-                setMessages(res.data);
+        // Fetch previous messages between auth user and selectedUser
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get(`/messages/${selectedUser.id}`);
+                setMessages(response.data);
+            } catch (error) {
+                console.error('Error fetching messages:', error);
             }
         };
 
-        handleFetchMessage();
+        fetchMessages();
 
-        const timeInterval = 3000;
-        const interval = setInterval(() => handleFetchMessage(), timeInterval);
+        const channel = window.Echo.private(`chat.${auth.user.id}`);
 
-        return () => clearInterval(interval);
+        channel.listen('MessageSent', (e: Message) => {
+            if (e.sender_id === selectedUser.id || e.receiver_id === selectedUser.id) {
+                setMessages(prev => [...prev, e]);
+            }
+        });
+
+        return () => {
+            window.Echo.leave(`chat.${auth.user.id}`);
+        };
     }, [selectedUser]);
+
 
     return (
         <Layout>

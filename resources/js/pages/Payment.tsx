@@ -74,7 +74,7 @@ export default function Payment({
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
                         {[
-                            { title: 'Pending Amount', value: `Rs. ${pendingAmount}`, icon: CircleDollarSign },
+                            { title: 'Pending Amount', value: `Rs. ${pendingAmount ?? 0}`, icon: CircleDollarSign },
                             { title: 'Paid Amount', value: `Rs. ${paidAmount ?? 0}`, icon: CircleDollarSign },
                         ].map((item, index) => (
                             <Card key={index}>
@@ -136,7 +136,7 @@ export default function Payment({
                                     ))}
                             </TableBody>
                             <TableCaption>
-                                {paymentRequests && paymentRequests.length === 0 && (
+                                {!paymentRequests && (
                                     <p className={'text-muted-foreground text-center italic'}>No payment requests found.</p>
                                 )}
                             </TableCaption>

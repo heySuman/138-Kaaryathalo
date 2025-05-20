@@ -9,7 +9,6 @@ import { RenderStars } from '@/pages/JobPosting/partials/FreelancerCard';
 
 export default function ClientProfile({ client, reviews }: { client: IClient; reviews: Review[] }) {
     const getInitials = useInitials();
-    console.log(reviews);
     return (
         <>
             {client && (
@@ -51,6 +50,8 @@ export default function ClientProfile({ client, reviews }: { client: IClient; re
                             <p className="text-muted-foreground text-md">{review.reviewer?.name}</p>
                         </div>
                     ))}
+
+                {reviews && reviews.length < 1 && <p className="text-muted-foreground text-md">No reviews yet.</p>}
             </div>
         </>
     );

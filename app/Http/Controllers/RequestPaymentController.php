@@ -15,14 +15,16 @@ class RequestPaymentController extends Controller
     public function index(): Response
     {
         $freelancer = Freelancer::where('user_id', Auth::id())->first();
+        $paymentRequests = null;
+        $pendingAmount = null;
+        $paidAmount = null;
 
-        if ($freelancer == null) {
-            redirect(route('login'));
+        if ($freelancer) {
+            $paymentRequests = RequestPayment::where('freelancer_id', $freelancer->id)->with(['job'])->latest()->get() ?? null;
+            $pendingAmount = RequestPayment::where('freelancer_id', $freelancer->id)->where('status', 'pending')->sum('amount');
+            $paidAmount = RequestPayment::where('freelancer_id', $freelancer->id)->where('status', 'approved')->sum('amount');
         }
-        $paymentRequests = RequestPayment::where('freelancer_id', $freelancer->id)->with(['job'])->latest()->get();
 
-        $pendingAmount = RequestPayment::where('client_id', $freelancer->id)->where('status', 'pending')->sum('amount');
-        $paidAmount = RequestPayment::where('client_id', $freelancer->id)->where('status', 'approved')->sum('amount');
 
         return Inertia::render('Freelancer/RequestPayment', [
             'paymentRequests' => $paymentRequests ?? null,

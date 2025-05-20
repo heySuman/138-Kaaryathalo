@@ -41,9 +41,9 @@ export default function Index({ applications }: { applications: PaginatedRespons
                             {applications.data.length > 0 ? (
                                 applications.data.map((application) => (
                                     <TableRow key={application.id}>
-                                        <TableCell>
-                                            <Link href={route('job.show', application.job.id)}>
-                                                <Button variant="link">{application.job?.title || 'N/A'}</Button>
+                                        <TableCell >
+                                            <Link href={route('job.show', application.job.id)} className={'capitalize'}>
+                                                <Button variant="link" className={'capitalize'}>{application.job?.title || 'N/A'}</Button>
                                             </Link>
                                         </TableCell>
                                         <TableCell>

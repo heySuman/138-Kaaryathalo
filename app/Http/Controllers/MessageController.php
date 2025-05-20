@@ -43,6 +43,8 @@ class MessageController extends Controller
             'message' => $encryptedMessage,
         ]);
 
+        broadcast(new MessageSent($message));
+
         return response()->json($message);
     }
 }

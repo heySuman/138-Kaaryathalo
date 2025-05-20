@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\DisputeController;
 
 use App\Http\Controllers\AdminController;
@@ -45,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat', function () {
         $role = Auth::user()->role;
         return Inertia::render('Chat/Index', [
-            'users' => User::where('id', '!=', Auth::id())->where('role', $role === 'client' ? 'freelancer' : 'client' )->with([$role === 'client' ? 'freelancer' : 'client'])
+            'users' => User::where('id', '!=', Auth::id())->where('role', $role === 'client' ? 'freelancer' : 'client')->with([$role === 'client' ? 'freelancer' : 'client'])
                 ->get(),
         ]);
     })->name('chat.index');

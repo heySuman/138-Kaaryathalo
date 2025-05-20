@@ -66,10 +66,19 @@ class PaymentController extends Controller
         }
 
         $client = Client::where('user_id', $user->id)->first();
-        $paymentRequests = RequestPayment::where('client_id', $client->id)
-            ->with(['freelancer', 'job'])
-            ->latest()
-            ->get();
+        $paymentRequests = null;
+        $paidAmount = null;
+        $pendingAmount = null;
+
+        if ($client) {
+            $paymentRequests =
+                RequestPayment::where('client_id', $client->id)
+                    ->with(['freelancer', 'job'])
+                    ->latest()
+                    ->get();
+            $pendingAmount = RequestPayment::where('client_id', $client->id)->where('status', 'pending')->sum('amount');
+            $paidAmount = RequestPayment::where('client_id', $client->id)->where('status', 'approved')->sum('amount');
+        }
 
         if ($request->has('pidx')) {
             $secretKey = '4c057d8ac62f4a3685785ac6edd41a40';
@@ -106,8 +115,6 @@ class PaymentController extends Controller
             return redirect('/payment');
         }
 
-        $pendingAmount = RequestPayment::where('client_id', $client->id)->where('status', 'pending')->sum('amount');
-        $paidAmount = RequestPayment::where('client_id', $client->id)->where('status', 'approved')->sum('amount');
 
         return Inertia::render('Payment', [
             'paymentRequests' => $paymentRequests,

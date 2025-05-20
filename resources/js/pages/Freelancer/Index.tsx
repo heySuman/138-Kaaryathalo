@@ -13,12 +13,11 @@ import { Head } from '@inertiajs/react';
 import { AlertCircleIcon } from 'lucide-react';
 
 export default function Index({ freelancer, reviews }: { freelancer: IFreelancer; reviews: Review[] }) {
-
     return (
         <AppLayout>
             <Head title="Profile" />
             {!freelancer && <ProfileRequiredCard variant={'freelancer'} />}
-            {freelancer.certificates.length === 0 || freelancer.projects.length === 0 || freelancer.experiences.length === 0 ? (
+            {freelancer && (freelancer.certificates.length === 0 || freelancer.projects.length === 0 || freelancer.experiences.length === 0) ? (
                 <div className={'text-muted flex items-center gap-4 bg-black p-4 dark:bg-white'}>
                     <AlertCircleIcon className={'text-red-500'} />
                     <p>You need to complete the profile before you apply to the jobs.</p>

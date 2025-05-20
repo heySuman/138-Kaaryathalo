@@ -10,9 +10,10 @@ use Illuminate\Queue\SerializesModels;
 class MessageSent implements ShouldBroadcast
 {
     use SerializesModels;
-
-    public function __construct(public Message $message)
+    protected $message;
+    public function __construct(Message $message)
     {
+        $this->message = $message;
     }
 
     public function broadcastOn(): PrivateChannel
@@ -20,14 +21,15 @@ class MessageSent implements ShouldBroadcast
         return new PrivateChannel('chat.' . $this->message->receiver_id);
     }
 
-    public function broadcastWith(): array
+    public function broadcastWith()
     {
         return [
             'id' => $this->message->id,
-            'message' => $this->message->message,
             'sender_id' => $this->message->sender_id,
             'receiver_id' => $this->message->receiver_id,
-            'created_at' => $this->message->created_at->toDateTimeString(),
+            'message' => decrypt($this->message->message),
+            'created_at' => $this->message->created_at,
+            'updated_at' => $this->message->updated_at,
         ];
     }
 }

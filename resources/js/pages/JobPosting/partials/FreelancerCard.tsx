@@ -19,7 +19,7 @@ export default function FreelancerCard({ jobPosting, freelancer, review }: { job
     };
     return (
         <Card className={'sticky top-4 flex items-center justify-center border-0 border-l shadow-none'}>
-            <CardContent>
+            <CardContent className={'flex flex-col items-center justify-center gap-2'}>
                 <Avatar className={'h-[150px] w-[150px]'}>
                     <AvatarImage src={freelancer.profile_picture as string} alt={freelancer.user.name} />
                     <AvatarFallback>{freelancer.user.name.charAt(0)}</AvatarFallback>

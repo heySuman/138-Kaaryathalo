@@ -93,7 +93,7 @@ export default function Index({ client, jobPostings }: { client: User; jobPostin
                                                 <TableCell>
                                                     <div className={'flex gap-2'}>
                                                         <Badge variant={'secondary'}>{job.category?.category}</Badge>
-                                                        <Link href={route('client.job-posting.show', job.id)} className={'underline'}>
+                                                        <Link href={route('client.job-posting.show', job.id)} className={'underline capitalize'}>
                                                             {job.title}
                                                         </Link>
                                                     </div>

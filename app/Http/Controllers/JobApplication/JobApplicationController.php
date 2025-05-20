@@ -5,9 +5,11 @@ namespace App\Http\Controllers\JobApplication;
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
+use App\Notifications\JobStatusNotification;
 use App\Notifications\NewJobApplication;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
@@ -102,6 +104,12 @@ class JobApplicationController extends Controller
             JobApplication::where('job_posting_id', $jobApplication->job_posting_id)
                 ->where('id', '!=', $jobApplication->id)
                 ->update(['status' => 'rejected']);
+        }
+
+        $freelancer = $jobApplication->freelancer->user;
+        if($freelancer) {
+            \Log::info('Notifying freelancer:', ['freelancer_id' => $freelancer->id]);
+            $freelancer->notify(new JobStatusNotification($jobApplication));
         }
 
         $jobApplication->job()->update(['status' => 'in progress']);

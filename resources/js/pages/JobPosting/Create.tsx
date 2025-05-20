@@ -5,10 +5,8 @@ import JobPostingForm from '@/pages/JobPosting/partials/JobPostingForm';
 import { ICategory } from '@/types/freelancer';
 import { Head } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import {Toaster} from "sonner";
 
 export default function Create({ categories }: { categories: ICategory[] }) {
-    console.log(categories);
     return (
         <AppLayout>
             <Head title={'Create Job Posting'} />

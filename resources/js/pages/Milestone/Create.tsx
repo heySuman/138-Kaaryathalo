@@ -16,10 +16,11 @@ import { format } from 'date-fns';
 import { ArrowLeft, CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast, Toaster } from 'sonner';
+import InputError from '@/components/input-error';
 
 export default function Create() {
     const [date, setDate] = useState<Date>();
-    const { data, setData, post } = useForm<Partial<Milestone>>({
+    const { data, setData, post, errors } = useForm<Partial<Milestone>>({
         title: '',
         description: '',
         due_date: undefined,
@@ -72,6 +73,8 @@ export default function Create() {
                                             value={data.title}
                                             onChange={(e) => setData('title', e.target.value)}
                                         />
+
+                                        {errors.title && <InputError message={errors.title} className="mt-2" />}
                                     </div>
 
                                     <div>
@@ -83,6 +86,7 @@ export default function Create() {
                                             value={data.description}
                                             onChange={(e) => setData('description', e.target.value)}
                                         />
+                                        {errors.description && <InputError message={errors.title} className="mt-2" />}
                                     </div>
 
                                     <div>

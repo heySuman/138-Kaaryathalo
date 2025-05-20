@@ -7,7 +7,7 @@ import { IFreelancer } from '@/types/freelancer';
 import { JobApplication } from '@/types/job-application';
 import { JobPosting } from '@/types/job-postings';
 import { Head } from '@inertiajs/react';
-import { formatDistance, subDays } from 'date-fns';
+import { format, formatDistance, subDays } from 'date-fns';
 import { ArrowLeft, Award, Calendar, Tag } from 'lucide-react';
 import sanitizeHtml from 'sanitize-html';
 
@@ -46,8 +46,7 @@ export default function Show({
                             <div className="text-muted-foreground flex items-center space-x-2">
                                 <span className="font-semibold">{jobPosting.client?.user.name}</span>
                                 <p className={'text-gray-500'}>
-                                    Posted{' '}
-                                    {formatDistance(subDays(new Date(), 3), jobPosting.created_at?.toLocaleString() as string, { addSuffix: true })}
+                                    {format(jobPosting.created_at?.toLocaleString() as string, 'dd MMM yyyy')}
                                 </p>
                             </div>
                         </div>
