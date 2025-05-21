@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { SharedData } from '@/types';
 import { Dispute } from '@/types/dispute';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Activity, CircleCheckBig, CircleXIcon } from 'lucide-react';
+import { Activity, CircleCheckBig, CircleXIcon, Settings } from 'lucide-react';
 
 export default function Index({
     totalUsers,
@@ -19,7 +19,6 @@ export default function Index({
 }) {
     const auth = usePage<SharedData>().props.auth;
 
-    console.log(recentDisputes);
     return (
         <AppLayout>
             <Head title="Admin" />
@@ -30,7 +29,13 @@ export default function Index({
                             <h2 className="text-3xl font-black">Welcome, {auth.user.name}</h2>
                         </div>
                     </div>
-
+                    <div className={'my-4 p-2 rounded-md bg-gray-100'}>
+                        <Link className={'text-md'} href={'/pulse'} target={'_blank'} rel={'noreferrer'}>
+                            <h2 className={'flex items-center gap-2 underline'}>
+                                <Settings /> See the server status
+                            </h2>
+                        </Link>
+                    </div>
                     <section className={'mb-4'}>
                         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {[
@@ -92,9 +97,7 @@ export default function Index({
                                 </div>
                             </CardContent>
                             <CardFooter className={'flex items-center justify-center'}>
-                                {recentDisputes.length === 0 && (
-                                    <h2 className={'text-center'}>No Disputes have been filed.</h2>
-                                )}
+                                {recentDisputes.length === 0 && <h2 className={'text-center'}>No Disputes have been filed.</h2>}
                             </CardFooter>
                         </Card>
                     </section>

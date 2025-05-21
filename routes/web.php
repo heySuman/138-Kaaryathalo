@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RatingReviewController;
+use App\Models\ChatRelation;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,10 +45,19 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/chat', function () {
-        $role = Auth::user()->role;
+        $authUser = Auth::user();
+        $isClient = $authUser->role === 'client';
+
+        $relations = ChatRelation::with(['client', 'freelancer', 'client.client', 'freelancer.freelancer'])
+            ->where($isClient ? 'client_user_id' : 'freelancer_user_id', $authUser->id)
+            ->get();
+
+        $chatUsers = $relations->map(function ($relation) use ($isClient) {
+            return $isClient ? $relation->freelancer : $relation->client;
+        });
+
         return Inertia::render('Chat/Index', [
-            'users' => User::where('id', '!=', Auth::id())->where('role', $role === 'client' ? 'freelancer' : 'client')->with([$role === 'client' ? 'freelancer' : 'client'])
-                ->get(),
+            'users' => $chatUsers,
         ]);
     })->name('chat.index');
 });
@@ -77,7 +87,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 });
 
-Broadcast::routes(['middleware' => ['auth', 'web']]);;
+Broadcast::routes(['middleware' => ['auth', 'web']]);
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/freelancer.php';
 require __DIR__ . '/client.php';

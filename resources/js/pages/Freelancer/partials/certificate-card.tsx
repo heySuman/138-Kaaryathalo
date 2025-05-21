@@ -5,6 +5,7 @@ import AlertDeleteCertificate from '@/pages/Freelancer/partials/popup-dialog/ale
 import { IFreelancer } from '@/types/freelancer';
 
 export function CertificateCard({ freelancer }: { freelancer: IFreelancer }) {
+    console.log(freelancer.certificates);
     return (
         <Card className="mx-auto w-[90%] overflow-hidden border-0 shadow-none">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -19,6 +20,9 @@ export function CertificateCard({ freelancer }: { freelancer: IFreelancer }) {
                     {freelancer.certificates && freelancer.certificates.length > 0
                         ? freelancer.certificates.map((c, i) => (
                               <div className="space-y-1" key={i}>
+                                  <div className={'w-[150px] h-[150px] rounded-md overflow-hidden [object-cover]'}>
+                                      <img src={c.certificate_url as string ?? 'https://placehold.co/600x400'} alt="certificate" />
+                                  </div>
                                   <div className={'flex items-center gap-3'}>
                                       <h3 className="font-semibold">{c.title}</h3>
                                       <div className={'flex items-center gap-2'}>

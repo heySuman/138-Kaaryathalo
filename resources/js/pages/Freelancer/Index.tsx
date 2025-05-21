@@ -11,6 +11,7 @@ import { IFreelancer } from '@/types/freelancer';
 import { Review } from '@/types/job-postings';
 import { Head } from '@inertiajs/react';
 import { AlertCircleIcon } from 'lucide-react';
+import { Toaster } from 'sonner';
 
 export default function Index({ freelancer, reviews }: { freelancer: IFreelancer; reviews: Review[] }) {
     return (
@@ -53,6 +54,7 @@ export default function Index({ freelancer, reviews }: { freelancer: IFreelancer
                             </div>
                         </CardContent>
                     </Card>
+                    <Toaster />
                 </section>
             )}
         </AppLayout>

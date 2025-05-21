@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { JobPosting } from '@/types/job-postings';
 import { JobApplication } from '@/types/job-application';
+import { Link } from '@inertiajs/react';
 
 export function ApplicationAlert({application}: {application: JobApplication}) {
     return (
@@ -31,7 +32,7 @@ export function ApplicationAlert({application}: {application: JobApplication}) {
 
                         <div className={'max-h-1/2 overflow-y-auto mt-5'}>
                             <h2>Cover Letter</h2>
-                            <p>{application.cover_letter ?? '--'}</p>
+                            <div dangerouslySetInnerHTML={{__html: application.cover_letter ?? '--'}}>{}</div>
                         </div>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -60,7 +61,11 @@ export default function JobApplicationCard({ jobPosting, patch }: { jobPosting: 
                     {jobPosting.application?.map((application) => (
                         <TableRow key={application.id}>
                             <TableCell className="font-medium">{application.id}</TableCell>
-                            <TableCell className={'col-span-3 capitalize'}>{application.freelancer.user.name}</TableCell>
+                            <TableCell className={'col-span-3 capitalize'}>
+                            <Link href={route('talent-search.show', application.freelancer.id)} className={'underline'}>
+                                {application.freelancer.user.name}
+                            </Link>
+                            </TableCell>
                             <TableCell>
                                 <Badge className={'capitalize'}>{application.status}</Badge>
                             </TableCell>

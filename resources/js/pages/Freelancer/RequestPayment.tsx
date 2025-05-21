@@ -27,7 +27,7 @@ export default function RequestPayment({
                     <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
                         {[
                             { title: 'Pending Amount', value: `Rs. ${pendingAmount ?? 0}`, icon: CircleDollarSign },
-                            { title: 'Paid Amount', value: `Rs. ${paidAmount ?? 0}`, icon: CircleDollarSign },
+                            { title: 'Earned Amount', value: `Rs. ${paidAmount ?? 0}`, icon: CircleDollarSign },
                         ].map((item, index) => (
                             <Card key={index}>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

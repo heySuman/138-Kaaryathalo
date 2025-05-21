@@ -14,6 +14,7 @@ export default function Index({ users }: { users: User[] }) {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [inputValue, setInputValue] = useState('');
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
     const auth = usePage<SharedData>().props.auth;
 
     const scrollToBottom = useCallback(() => {
@@ -33,7 +34,7 @@ export default function Index({ users }: { users: User[] }) {
 
         try {
             const payload = {
-                id: 1000000,
+                id: Date.now(),
                 sender_id: auth.user.id,
                 receiver_id: userId,
                 message: inputValue,
@@ -41,7 +42,7 @@ export default function Index({ users }: { users: User[] }) {
                 updated_at: new Date().toISOString(),
             };
 
-            setMessages(prevState => [...(prevState || []), payload as Message ])
+            setMessages((prev) => [...prev, payload as Message]);
             setInputValue('');
 
             await axios.post(`/messages`, payload);
@@ -55,7 +56,6 @@ export default function Index({ users }: { users: User[] }) {
     useEffect(() => {
         if (!selectedUser) return;
 
-        // Fetch previous messages between auth user and selectedUser
         const fetchMessages = async () => {
             try {
                 const response = await axios.get(`/messages/${selectedUser.id}`);
@@ -68,10 +68,9 @@ export default function Index({ users }: { users: User[] }) {
         fetchMessages();
 
         const channel = window.Echo.private(`chat.${auth.user.id}`);
-
         channel.listen('MessageSent', (e: Message) => {
             if (e.sender_id === selectedUser.id || e.receiver_id === selectedUser.id) {
-                setMessages(prev => [...prev, e]);
+                setMessages((prev) => [...prev, e]);
             }
         });
 
@@ -80,11 +79,11 @@ export default function Index({ users }: { users: User[] }) {
         };
     }, [selectedUser]);
 
-
     return (
         <Layout>
             <Head title="Chat" />
             <div className="flex h-[90vh] w-full overflow-hidden rounded border">
+                {/* Sidebar: Users */}
                 <div className="w-1/4 space-y-4 border-r p-4">
                     <h2 className="text-xl font-semibold">Users</h2>
                     {users.map((user) => (
@@ -95,50 +94,45 @@ export default function Index({ users }: { users: User[] }) {
                             onClick={() => setSelectedUser(user)}
                         >
                             <Avatar>
-                                {user.client && (
-                                    <>
-                                        <AvatarImage src={user.client.profile_picture as string} alt="@shadcn" />
-                                        <AvatarFallback>{user.name[0]}</AvatarFallback>
-                                    </>
-                                )}{' '}
-                                {user.freelancer && (
-                                    <>
-                                        <AvatarImage src={user.freelancer.profile_picture as string} alt="@shadcn" />
-                                        <AvatarFallback>{user.name[0]}</AvatarFallback>
-                                    </>
-                                )}
+                                <AvatarImage
+                                    src={
+                                        auth.user.role === 'freelancer'
+                                            ? user.freelancer?.profile_picture
+                                            : (user.client?.profile_picture)
+                                    }
+                                    alt={user.name}
+                                />
+                                <AvatarFallback>{user.name[0]}</AvatarFallback>
                             </Avatar>
                             {user.name}
                         </Button>
                     ))}
                 </div>
 
-                {/* Chat area */}
+                {/* Main Chat Area */}
                 <div className="flex w-3/4 flex-col">
                     {selectedUser ? (
                         <>
                             {/* Header */}
-                            <div className="bg-background border-b p-4 shadow-sm flex items-center gap-4">
+                            <div className="bg-background flex items-center gap-4 border-b p-4 shadow-sm">
                                 <Avatar>
-                                    {selectedUser.client && (
-                                        <>
-                                            <AvatarImage src={selectedUser.client.profile_picture as string} alt="@shadcn" />
-                                            <AvatarFallback>{selectedUser.name[0]}</AvatarFallback>
-                                        </>
-                                    )}{' '}
-                                    {selectedUser.freelancer && (
-                                        <>
-                                            <AvatarImage src={selectedUser.freelancer.profile_picture as string} alt="@shadcn" />
-                                            <AvatarFallback>{selectedUser.name[0]}</AvatarFallback>
-                                        </>
-                                    )}
+                                    <AvatarImage
+                                        src={
+                                            selectedUser.role === 'freelancer'
+                                                ? selectedUser.freelancer?.profile_picture
+                                                : (selectedUser.client?.profile_picture)
+                                        }
+                                        alt={selectedUser.name}
+                                    />
+                                    <AvatarFallback>{selectedUser.name[0]}</AvatarFallback>
                                 </Avatar>
                                 <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
                             </div>
 
+                            {/* Messages */}
                             <ScrollArea className="flex-1 overflow-y-auto p-4">
                                 <div className="space-y-2">
-                                    {messages?.map((message) => (
+                                    {messages.map((message) => (
                                         <div
                                             key={message.id}
                                             className={`flex ${message.sender_id === auth.user.id ? 'justify-end' : 'justify-start'}`}
@@ -158,7 +152,7 @@ export default function Index({ users }: { users: User[] }) {
                                 </div>
                             </ScrollArea>
 
-                            {/* Input area */}
+                            {/* Input */}
                             <div className="border-t p-4">
                                 <div className="flex items-center gap-2">
                                     <Input
@@ -185,7 +179,15 @@ export default function Index({ users }: { users: User[] }) {
                         </>
                     ) : (
                         <div className="text-muted-foreground flex flex-1 items-center justify-center">
-                            <p>Select a user to start chatting.</p>
+                            {users && users.length === 0 ? (
+                                auth.user.role === 'freelancer' ? (
+                                    <p>You can message clients once your applications get approved.</p>
+                                ) : (
+                                    <p>You can message talents once you approve applications.</p>
+                                )
+                            ) : (
+                                <p>Select a user to start chatting.</p>
+                            )}
                         </div>
                     )}
                 </div>

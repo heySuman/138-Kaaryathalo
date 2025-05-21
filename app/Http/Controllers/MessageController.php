@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Events\MessageSent;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index(Request $request, User $user)
+    public function index(Request $request, User $user): JsonResponse
     {
         $authId = auth()->id();
         $messages = Message::where(function ($query) use ($authId, $user) {

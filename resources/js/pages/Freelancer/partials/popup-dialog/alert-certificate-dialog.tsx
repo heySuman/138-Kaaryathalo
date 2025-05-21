@@ -1,6 +1,5 @@
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -16,6 +15,7 @@ import { ICertificate } from '@/types/freelancer';
 import { useForm } from '@inertiajs/react';
 import { Pencil, Plus } from 'lucide-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function AlertCertificateForm({ certificate }: { certificate: ICertificate | null }) {
     const { data, setData, post, patch, processing, errors, reset } = useForm<Partial<ICertificate>>({
@@ -37,13 +37,23 @@ export default function AlertCertificateForm({ certificate }: { certificate: ICe
                 onSuccess: () => {
                     reset();
                     setIsOpen(false);
+                    toast.success('Certificate updated successfully');
+                },
+                onError: () => {
+                    toast.error('Unable to update the certificate, please try again');
                 },
             });
         } else {
             post(route('freelancer.certificate.store'), {
+                forceFormData: true,
                 onSuccess: () => {
                     reset();
                     setIsOpen(false);
+                    toast.success('Certificate added successfully');
+                },
+                onError: (e) => {
+                    console.log(e);
+                    toast.error('Could not add the certificate, please try again');
                 },
             });
         }
@@ -104,14 +114,14 @@ export default function AlertCertificateForm({ certificate }: { certificate: ICe
                                 <Input type="file" accept="image/*" onChange={handleFileChange} />
                                 {errors.certificate_url && <p className="text-red-500">{errors.certificate_url}</p>}
                             </div>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel onClick={() => setIsOpen(false)}>Cancel</AlertDialogCancel>
+                                <Button type={'submit'} disabled={processing}>
+                                    {processing ? 'Saving...' : certificate ? 'Update' : 'Add'}
+                                </Button>
+                            </AlertDialogFooter>
                         </form>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setIsOpen(false)}>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={submit} disabled={processing}>
-                            {processing ? 'Saving...' : certificate ? 'Update' : 'Add'}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
                 </AlertDialogContent>
             )}
         </AlertDialog>

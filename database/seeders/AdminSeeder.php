@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'admin@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('HeraldCollege'),
+            'password' => Hash::make(env('ADMIN_PASSWORD')),
             'phone' => '9800000000',
             'role' => 'admin',
             'remember_token' => Str::random(10),
