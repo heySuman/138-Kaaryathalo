@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use Auth;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,6 +13,7 @@ class JobStatusNotification extends Notification
     use Queueable;
 
     protected $jobApplication;
+
     /**
      * Create a new notification instance.
      */
@@ -27,7 +29,7 @@ class JobStatusNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -36,9 +38,20 @@ class JobStatusNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Your application of '. $this->jobApplication->job->title .' has been ' . $this->jobApplication->status)
-            ->action('Notification Action', url('/freelancer/job-applications'))
+            ->subject('Job Application Updated')
+            ->greeting('Hello,' . $this->jobApplication->job->freelancer->user->name)
+            ->line('Your application of ' . $this->jobApplication->job->title . ' has been updated.')
+            ->action('View Applications', url('/freelancer/job-applications'))
             ->line('');
+    }
+
+    public function toDatabase(object $notifiable): array
+    {
+        return [
+            'job_id' => $this->jobApplication->job->id,
+            'job_title' => $this->jobApplication->job->title,
+            'message' => 'Your application of ' . $this->jobApplication->job->title . ' has been updated.',
+        ];
     }
 
     /**

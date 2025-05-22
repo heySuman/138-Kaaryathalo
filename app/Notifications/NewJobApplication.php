@@ -41,6 +41,8 @@ class NewJobApplication extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject('New Job Application')
+            ->greeting('Hello, ' . $this->job->client->user->name)
             ->line('Your job posting has received a new application!')
             ->action('View Job', url(':8000/client/my-jobs/' . $this->job->id));
     }

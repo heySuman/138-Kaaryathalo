@@ -115,13 +115,11 @@ class FreelancerController extends Controller
                 return back()->withErrors(['error' => 'Profile not found.']);
             }
 
-            // Delete the profile picture from Cloudinary if it exists
             if ($freelancer->profile_picture) {
                 $publicId = basename(parse_url($freelancer->profile_picture, PHP_URL_PATH)); // Extract public ID
                 Cloudinary::destroy($publicId);
             }
 
-            // Delete the freelancer's record
             $freelancer->delete();
 
             return redirect()->route('freelancer.profile')->with('success', 'Profile deleted successfully.');
