@@ -14,7 +14,7 @@ class AdminController extends Controller
     {
         $totalUsers = User::count();
         $totalJobs = JobPosting::count();
-        $totalTransactions = RequestPayment::count();
+        $totalTransactions = RequestPayment::sum('amount');
 
         $recentDisputes = Dispute::with(['jobPosting', 'jobPosting.client', 'jobPosting.client.user', 'submittedByUser'])->latest()
             ->take(5)->get();

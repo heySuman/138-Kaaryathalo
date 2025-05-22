@@ -18,7 +18,9 @@ export default function Index({
     recentDisputes: Dispute[];
 }) {
     const auth = usePage<SharedData>().props.auth;
-
+    console.log(totalUsers)
+    console.log(totalJobs)
+    console.log(totalTransactions)
     return (
         <AppLayout>
             <Head title="Admin" />
@@ -30,18 +32,18 @@ export default function Index({
                         </div>
                     </div>
                     <div className={'my-4 p-2 rounded-md bg-gray-100'}>
-                        <Link className={'text-md'} href={'/pulse'} target={'_blank'} rel={'noreferrer'}>
+                        <a className={'text-md'} href={'/pulse'} target={'_blank'} rel={'noreferrer'}>
                             <h2 className={'flex items-center gap-2 underline'}>
                                 <Settings /> See the server status
                             </h2>
-                        </Link>
+                        </a>
                     </div>
                     <section className={'mb-4'}>
                         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {[
                                 { title: 'Total Users', value: totalUsers, icon: Activity },
                                 { title: 'Total Jobs Created', value: totalJobs, icon: CircleXIcon },
-                                { title: 'Total Transactions', value: `$ ${totalTransactions}`, icon: CircleCheckBig },
+                                { title: 'Total Transactions', value: `Rs. ${totalTransactions}`, icon: CircleCheckBig },
                             ].map((item, index) => (
                                 <Card key={index}>
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

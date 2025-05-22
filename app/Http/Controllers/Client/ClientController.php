@@ -21,83 +21,98 @@ class ClientController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $user = Auth::user();
+        try {
 
-        $validated = $request->validate([
-            'company_name' => ['nullable', 'string', 'max:255'],
-            'industry' => ['nullable', 'string', 'max:255'],
-            'about' => ['nullable', 'string'],
-            'profile_picture' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
-        ]);
+            $user = Auth::user();
 
-        $profilePictureUrl = null;
-
-        if ($request->hasFile('profile_picture')) {
-            $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
-                'folder' => 'profile_pictures',
+            $validated = $request->validate([
+                'company_name' => ['nullable', 'string', 'max:255'],
+                'industry' => ['nullable', 'string', 'max:255'],
+                'about' => ['nullable', 'string'],
+                'profile_picture' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             ]);
-            $profilePictureUrl = $uploadedFile->getSecurePath();
+
+            $profilePictureUrl = null;
+
+            if ($request->hasFile('profile_picture')) {
+                $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
+                    'folder' => 'profile_pictures',
+                ]);
+                $profilePictureUrl = $uploadedFile->getSecurePath();
+            }
+
+            Client::create([
+                'user_id' => $user->id,
+                'company_name' => $validated['company_name'],
+                'industry' => $validated['industry'] ?? null,
+                'about' => $validated['about'] ?? null,
+                'profile_picture' => $profilePictureUrl,
+            ]);
+
+            return back()->with('success', 'Client profile created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Client profile not created.']);
         }
-
-        Client::create([
-            'user_id' => $user->id,
-            'company_name' => $validated['company_name'],
-            'industry' => $validated['industry'] ?? null,
-            'about' => $validated['about'] ?? null,
-            'profile_picture' => $profilePictureUrl,
-        ]);
-
-        return back()->with('success', 'Client profile created successfully.');
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $user = Auth::user();
-        $client = Client::where('user_id', $user->id)->first();
+        try {
 
-        if (!$client) {
-            return back()->withErrors(['error' => 'Client profile not found.']);
-        }
+            $user = Auth::user();
+            $client = Client::where('user_id', $user->id)->first();
 
-        $validated = $request->validate([
-            'company_name' => ['nullable', 'string', 'max:255'],
-            'industry' => ['nullable', 'string', 'max:255'],
-            'about' => ['nullable', 'string'],
-            'profile_picture' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
-        ]);
-
-        if ($request->hasFile('profile_picture')) {
-            if ($client->profile_picture) {
-                $publicId = basename(parse_url($client->profile_picture, PHP_URL_PATH));
-                Cloudinary::destroy($publicId);
+            if (!$client) {
+                return back()->withErrors(['error' => 'Client profile not found.']);
             }
-            $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
-                'folder' => 'profile_pictures'
+
+            $validated = $request->validate([
+                'company_name' => ['nullable', 'string', 'max:255'],
+                'industry' => ['nullable', 'string', 'max:255'],
+                'about' => ['nullable', 'string'],
+                'profile_picture' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             ]);
-            $validated['profile_picture'] = $uploadedFile->getSecurePath();
+
+            if ($request->hasFile('profile_picture')) {
+                if ($client->profile_picture) {
+                    $publicId = basename(parse_url($client->profile_picture, PHP_URL_PATH));
+                    Cloudinary::destroy($publicId);
+                }
+                $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
+                    'folder' => 'profile_pictures'
+                ]);
+                $validated['profile_picture'] = $uploadedFile->getSecurePath();
+            }
+
+            $client->update(array_filter($validated, fn($value) => !is_null($value)));
+
+            return back()->with('success', 'Client profile updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Client profile not updated.']);
         }
-
-        $client->update(array_filter($validated, fn($value) => !is_null($value)));
-
-        return back()->with('success', 'Client profile updated successfully.');
     }
 
     public function delete(): RedirectResponse
     {
-        $user = Auth::user();
-        $client = Client::where('user_id', $user->id)->first();
+        try {
 
-        if (!$client) {
-            return back()->withErrors(['error' => 'Client profile not found.']);
+            $user = Auth::user();
+            $client = Client::where('user_id', $user->id)->first();
+
+            if (!$client) {
+                return back()->withErrors(['error' => 'Client profile not found.']);
+            }
+
+            if ($client->profile_picture) {
+                $publicId = basename(parse_url($client->profile_picture, PHP_URL_PATH));
+                Cloudinary::destroy($publicId);
+            }
+
+            $client->delete();
+
+            return redirect()->route('client.profile')->with('success', 'Client profile deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Client profile not deleted.']);
         }
-
-        if ($client->profile_picture) {
-            $publicId = basename(parse_url($client->profile_picture, PHP_URL_PATH));
-            Cloudinary::destroy($publicId);
-        }
-
-        $client->delete();
-
-        return redirect()->route('client.profile')->with('success', 'Client profile deleted successfully.');
     }
 }
