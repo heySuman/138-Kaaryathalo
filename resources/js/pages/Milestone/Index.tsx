@@ -128,8 +128,8 @@ export default function Index({ jobs, freelancer }: { jobs?: JobPosting[]; freel
                                             <ul className="space-y-3">
                                                 {job.reviews.map((review) => (
                                                     <div>
-                                                        <div className={'flex items-center gap-2'}>
-                                                            <h2 className="text-xl font-medium"> {review.review}</h2>
+                                                        <div className={'flex gap-2 flex-col justify-center items-start'}>
+                                                            <h2 className="text-md font-medium"> {review.review}</h2>
                                                             <RenderStars rating={review.rating} />
                                                         </div>
                                                         <div className="my-4">

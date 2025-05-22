@@ -39,7 +39,7 @@ class JobStatusNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Job Application Updated')
-            ->greeting('Hello,' . $this->jobApplication->job->freelancer->user->name)
+            ->greeting('Hello,')
             ->line('Your application of ' . $this->jobApplication->job->title . ' has been updated.')
             ->action('View Applications', url('/freelancer/job-applications'))
             ->line('');

@@ -5,6 +5,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
+import { Dispute } from '@/types/dispute';
 
 export default function Show({ dispute }: { dispute: Dispute }) {
     return (
