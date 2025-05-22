@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';
+import ExpandableImage from '@/pages/Freelancer/partials/click-to-expand';
 import { RenderStars } from '@/pages/JobPosting/partials/FreelancerCard';
 import { IFreelancer } from '@/types/freelancer';
 import { Review } from '@/types/job-postings';
@@ -62,6 +63,10 @@ export default function Show({ freelancer, reviews }: { freelancer: IFreelancer;
                                     {freelancer.certificates && freelancer.certificates.length > 0
                                         ? freelancer.certificates.map((c, i) => (
                                               <div className="space-y-1" key={i}>
+                                                  {c.certificate_url && <ExpandableImage src={c.certificate_url as string} alt={'certificate'} />}
+                                                  {/*<div className={'w-[150px] h-[150px] rounded-md overflow-hidden [object-cover]'}>*/}
+                                                  {/*    <img src={c.certificate_url as string ?? 'https://placehold.co/600x400'} alt="certificate" />*/}
+                                                  {/*</div>*/}
                                                   <div className={'flex items-center gap-3'}>
                                                       <h3 className="font-semibold">{c.title}</h3>
                                                   </div>

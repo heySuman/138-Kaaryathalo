@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Freelancer\Freelancer;
 use App\Models\RatingReview;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,52 +27,78 @@ class FreelancerController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $user = Auth::user();
+        try {
 
-        $validated = $request->validate([
-            'headline' => ['required', 'string', 'max:255'],
-            'about' => ['required', 'string'],
-            'profile_picture' => ['required', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
-        ]);
+            $user = Auth::user();
 
-        $profilePictureUrl = null;
-
-        if ($request->hasFile('profile_picture')) {
-            $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
-                'folder' => 'profile_pictures'
+            $validated = $request->validate([
+                'headline' => ['required', 'string', 'max:255'],
+                'about' => ['required', 'string'],
+                'profile_picture' => ['required', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             ]);
-            $profilePictureUrl = $uploadedFile->getSecurePath();
+
+            $profilePictureUrl = null;
+
+            if ($request->hasFile('profile_picture')) {
+                $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
+                    'folder' => 'profile_pictures'
+                ]);
+                $profilePictureUrl = $uploadedFile->getSecurePath();
+            }
+
+            Freelancer::create([
+                'user_id' => $user->id,
+                'headline' => $validated['headline'],
+                'about' => $validated['about'],
+                'profile_picture' => $profilePictureUrl,
+            ]);
+
+            return back()->with('success', 'Profile created successfully.');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => 'Profile not created.']);
         }
-
-        Freelancer::create([
-            'user_id' => $user->id,
-            'headline' => $validated['headline'],
-            'about' => $validated['about'],
-            'profile_picture' => $profilePictureUrl,
-        ]);
-
-        return back()->with('success', 'Profile created successfully.');
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $user = Auth::user();
-        $freelancer = Freelancer::where('user_id', $user->id)->first();
+        try {
+            $user = Auth::user();
+            $freelancer = Freelancer::where('user_id', $user->id)->first();
 
-        if (!$freelancer) {
-            return back()->withErrors(['error' => 'Profile not found.']);
+            if (!$freelancer) {
+                return back()->withErrors(['error' => 'Profile not found.']);
+            }
+
+            $validated = $request->validate([
+                'headline' => ['nullable', 'string', 'max:255'],
+                'about' => ['nullable', 'string'],
+                'profile_picture' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
+            ]);
+
+            if ($request->hasFile('profile_picture')) {
+                if ($freelancer->profile_picture) {
+                    $publicId = basename(parse_url($freelancer->profile_picture, PHP_URL_PATH)); // Extract public ID
+                    Cloudinary::destroy($publicId);
+                }
+
+                $uploadedFile = Cloudinary::upload(
+                    $request->file('profile_picture')->getRealPath(),
+                    ['folder' => 'profile_pictures']
+                );
+
+                $validated['profile_picture'] = $uploadedFile->getSecurePath();
+            }
+
+            $freelancer->update(array_filter($validated, fn($value) => !is_null($value)));
+
+            return back()->with('success', 'Profile updated successfully.');
+        } catch (Exception $e) {
+            \Log::error('Profile update failed', [
+                'message' => $e->getMessage(),
+            ]);
+            return back()->withErrors(['error' => 'Profile not updated.']);
         }
-
-        $validated = $request->validate([
-            'headline' => ['nullable', 'string', 'max:255'],
-            'about' => ['nullable', 'string'],
-        ]);
-
-        $freelancer->update(array_filter($validated, fn($value) => !is_null($value)));
-
-        return back()->with('success', 'Profile updated successfully.');
     }
-
     /**
      * Delete the freelancer's profile and associated profile picture.
      *
@@ -79,22 +106,73 @@ class FreelancerController extends Controller
      */
     public function delete(): RedirectResponse
     {
-        $user = Auth::user();
-        $freelancer = Freelancer::where('user_id', $user->id)->first();
+        try {
 
-        if (!$freelancer) {
-            return back()->withErrors(['error' => 'Profile not found.']);
+            $user = Auth::user();
+            $freelancer = Freelancer::where('user_id', $user->id)->first();
+
+            if (!$freelancer) {
+                return back()->withErrors(['error' => 'Profile not found.']);
+            }
+
+            // Delete the profile picture from Cloudinary if it exists
+            if ($freelancer->profile_picture) {
+                $publicId = basename(parse_url($freelancer->profile_picture, PHP_URL_PATH)); // Extract public ID
+                Cloudinary::destroy($publicId);
+            }
+
+            // Delete the freelancer's record
+            $freelancer->delete();
+
+            return redirect()->route('freelancer.profile')->with('success', 'Profile deleted successfully.');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => 'Profile not deleted.']);
         }
+    }
 
-        // Delete the profile picture from Cloudinary if it exists
-        if ($freelancer->profile_picture) {
-            $publicId = basename(parse_url($freelancer->profile_picture, PHP_URL_PATH)); // Extract public ID
-            Cloudinary::destroy($publicId);
+    public function updateProfilePicture(Request $request): RedirectResponse
+    {
+        try {
+            \Log::info('Received profile picture request', [
+                'has_file' => $request->hasFile('profile_picture'),
+                'method' => $request->input('_method'),
+            ]);
+
+            $user = Auth::user();
+            $freelancer = Freelancer::where('user_id', $user->id)->first();
+
+            if (!$freelancer) {
+                return back()->withErrors(['profile_picture' => 'Freelancer profile not found.']);
+            }
+
+            $validated = $request->validate([
+                'profile_picture' => ['required', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
+            ]);
+
+            if ($request->hasFile('profile_picture')) {
+                $uploadedFile = Cloudinary::upload(
+                    $request->file('profile_picture')->getRealPath(),
+                    ['folder' => 'profile_pictures']
+                );
+
+                $profilePictureUrl = $uploadedFile->getSecurePath();
+
+                $freelancer->update([
+                    'profile_picture' => $profilePictureUrl,
+                ]);
+
+                return back()->with('success', 'Profile picture updated successfully.');
+            }
+
+            return back()->withErrors(['profile_picture' => 'No file was uploaded.']);
+        } catch (Exception $e) {
+            \Log::error('Profile picture upload failed', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return back()->withErrors([
+                'profile_picture' => 'Profile picture could not be updated: ' . $e->getMessage(),
+            ]);
         }
-
-        // Delete the freelancer's record
-        $freelancer->delete();
-
-        return redirect()->route('freelancer.profile')->with('success', 'Profile deleted successfully.');
     }
 }

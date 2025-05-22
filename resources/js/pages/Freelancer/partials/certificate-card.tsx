@@ -3,9 +3,9 @@ import { Separator } from '@/components/ui/separator';
 import AlertCertificateForm from '@/pages/Freelancer/partials/popup-dialog/alert-certificate-dialog';
 import AlertDeleteCertificate from '@/pages/Freelancer/partials/popup-dialog/alert-delete-certificate';
 import { IFreelancer } from '@/types/freelancer';
+import ExpandableImage from '@/pages/Freelancer/partials/click-to-expand';
 
 export function CertificateCard({ freelancer }: { freelancer: IFreelancer }) {
-    console.log(freelancer.certificates);
     return (
         <Card className="mx-auto w-[90%] overflow-hidden border-0 shadow-none">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -20,9 +20,7 @@ export function CertificateCard({ freelancer }: { freelancer: IFreelancer }) {
                     {freelancer.certificates && freelancer.certificates.length > 0
                         ? freelancer.certificates.map((c, i) => (
                               <div className="space-y-1" key={i}>
-                                  <div className={'w-[150px] h-[150px] rounded-md overflow-hidden [object-cover]'}>
-                                      <img src={c.certificate_url as string ?? 'https://placehold.co/600x400'} alt="certificate" />
-                                  </div>
+                                  {c.certificate_url && <ExpandableImage src={c.certificate_url as string} alt={'certificate'} />}
                                   <div className={'flex items-center gap-3'}>
                                       <h3 className="font-semibold">{c.title}</h3>
                                       <div className={'flex items-center gap-2'}>

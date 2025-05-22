@@ -14,6 +14,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { Toaster } from 'sonner';
 
 export default function Index({ freelancer, reviews }: { freelancer: IFreelancer; reviews: Review[] }) {
+    console.log(freelancer);
     return (
         <AppLayout>
             <Head title="Profile" />

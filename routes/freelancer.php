@@ -41,4 +41,6 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::get('request-payment', [RequestPaymentController::class, 'index'])->name('request-payment.index');
     Route::post('request-payment', [RequestPaymentController::class, 'store'])->name('request-payment.store');
     Route::patch('request-payment/{payment}/update', [RequestPaymentController::class, 'updateStatus'])->name('request-payment.update');
+
+    Route::patch('update-profile-picture', [FreelancerController::class, 'updateProfilePicture'])->name('freelancer.profile.update-profile-picture');
 });

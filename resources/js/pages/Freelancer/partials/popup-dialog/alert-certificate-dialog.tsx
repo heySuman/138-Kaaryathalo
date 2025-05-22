@@ -18,11 +18,12 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function AlertCertificateForm({ certificate }: { certificate: ICertificate | null }) {
-    const { data, setData, post, patch, processing, errors, reset } = useForm<Partial<ICertificate>>({
+    const { data, setData, post, processing, errors, reset } = useForm<Partial<ICertificate>>({
         title: certificate?.title || '',
         certificate_url: certificate?.certificate_url || null,
         issued_date: certificate?.issued_date || '',
         issuer: certificate?.issuer || '',
+        _method: certificate ? 'PATCH' : 'POST',
     });
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +34,8 @@ export default function AlertCertificateForm({ certificate }: { certificate: ICe
     const submit = (e: FormEvent) => {
         e.preventDefault();
         if (certificate) {
-            patch(route('freelancer.certificate.update', certificate.id), {
+            post(route('freelancer.certificate.update', certificate.id), {
+                forceFormData: true,
                 onSuccess: () => {
                     reset();
                     setIsOpen(false);
