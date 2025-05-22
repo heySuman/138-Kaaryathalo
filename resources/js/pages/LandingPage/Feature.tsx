@@ -10,12 +10,11 @@ type Feature = {
 export default function Features() {
     return (
         <>
-            <section id="features" className="py-16 md:py-20 lg:py-28 border-b">
+            <section id="features" className="py-16 md:py-20 lg:p-28 border-b bg-gray-100">
                 <div className="container">
                     <SectionTitle
                         title="Main Features"
-                        paragraph="clear
-                        "
+                        paragraph=""
                         center
                     />
 
@@ -33,9 +32,9 @@ export default function Features() {
 const SingleFeature = ({ feature }: { feature: Feature }) => {
     const { icon, title, paragraph } = feature;
     return (
-        <div className="w-full">
+        <div className="w-full border p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300 dark:bg-dark-second dark:border-dark-second hover:cursor-pointer bg-white">
             <div className="wow fadeInUp" data-wow-delay=".15s">
-                <div className="bg-primary/10 text-primary mb-10 flex h-[70px] w-[70px] items-center justify-center rounded-md">{icon}</div>
+                <div className="bg-blue-100 text-primary mb-10 flex h-[70px] w-[70px] items-center justify-center rounded-md">{icon}</div>
                 <h3 className="mb-5 text-xl font-bold text-black sm:text-2xl lg:text-xl xl:text-2xl dark:text-white">{title}</h3>
                 <p className="text-body-color pr-[10px] text-base leading-relaxed font-medium">{paragraph}</p>
             </div>

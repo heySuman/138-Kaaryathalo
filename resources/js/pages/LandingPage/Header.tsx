@@ -22,7 +22,7 @@ const Header = ({ role, auth }: { role: ROLE; auth: Auth }) => {
                             <div className="">
                                 <AppLogoIcon className="fill-primary size-8" />
                             </div>
-                            <div className="ml-1 grid flex-1 text-left text-2xl">
+                            <div className="ml-1 grid flex-1 text-left text-xl">
                                 <span className="mb-0.5 truncate leading-none font-semibold hidden sm:block">Kaaryathalo</span>
                             </div>
                         </div>

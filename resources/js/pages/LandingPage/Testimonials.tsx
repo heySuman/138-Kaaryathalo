@@ -35,15 +35,18 @@ const testimonialData: Testimonial[] = [
 
 const Testimonials = () => {
     return (
-        <section className="dark:bg-bg-color-dark bg-gray-light relative z-10 py-16 md:py-20 lg:py-28">
-            <div className="container">
+        <section className="relative dark:bg-bg-color-dark bg-gray-light z-10 py-16 md:py-20 lg:py-28">
+            <div
+                className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+            ></div>
+            <div className="relative container">
                 <SectionTitle
                     title="What Our Users Says"
                     paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
                     center
                 />
 
-                <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+                <div className="p-5 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
                     {testimonialData.map((testimonial) => (
                         <SingleTestimonial key={testimonial.id} testimonial={testimonial} />
                     ))}
@@ -54,7 +57,7 @@ const Testimonials = () => {
 };
 
 const starIcon = (
-    <svg width="18" height="16" viewBox="0 0 18 16" className="fill-current">
+    <svg width="18" height="16" viewBox="0 0 18 16" className="fill-amber-500">
         <path d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z" />
     </svg>
 );
@@ -72,8 +75,8 @@ const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
     }
 
     return (
-        <div className="w-full">
-            <div className="shadow-two hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark rounded-xs bg-white p-8 duration-300 lg:px-5 xl:px-8">
+        <div className="w-full shadow-md rounded-2xl hover:shadow-lg transition duration-300 dark:bg-dark-second dark:border-dark-second hover:cursor-pointer ">
+            <div className="shadow-two hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark p-8 duration-300 lg:px-5 xl:px-8 border rounded-2xl overflow-hidden bg-gray-100">
                 <div className="mb-5 flex items-center space-x-1">{ratingIcons}</div>
                 <p className="border-body-color/10 text-body-color mb-8 border-b pb-8 text-base leading-relaxed dark:border-white/10 dark:text-white">
                     “{content}
